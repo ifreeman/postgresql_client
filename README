@@ -1,6 +1,10 @@
 
 Postgresql_client can work with this specific database.
 
+user name in database is 'student'
+password in datebase is 'tvgu'
+database name is 'student_db'
+
 The structure of the datavase is a follows
 CREATE TABLE software_info (software_name varchar(50), description varchar(255) default 'Неизвестно', size bigint check(size > 0), category varchar(50) default 'неизвестно', price money, PRIMARY KEY (software_name));
 CREATE TABLE software_and_developers (email varchar(100) check(email like '%@%'), software_name varchar(50), PRIMARY KEY (email, software_name));
