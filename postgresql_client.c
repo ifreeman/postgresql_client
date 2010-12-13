@@ -27,7 +27,6 @@ void ShowAll() {
          
          
          
-         
     
 #line 12 "postgresql_client.pgc"
  char software_name [ 50 ] ;
@@ -42,38 +41,35 @@ void ShowAll() {
  char category [ 50 ] ;
  
 #line 16 "postgresql_client.pgc"
- char price [ 50 ] ;
- 
-#line 17 "postgresql_client.pgc"
  char email [ 100 ] ;
  
-#line 18 "postgresql_client.pgc"
+#line 17 "postgresql_client.pgc"
  char fio [ 150 ] ;
  
-#line 19 "postgresql_client.pgc"
+#line 18 "postgresql_client.pgc"
  char organization [ 150 ] ;
  
-#line 20 "postgresql_client.pgc"
+#line 19 "postgresql_client.pgc"
  char pkg_name [ 150 ] ;
  
-#line 21 "postgresql_client.pgc"
+#line 20 "postgresql_client.pgc"
  char pkg_location [ 150 ] ;
  
-#line 22 "postgresql_client.pgc"
+#line 21 "postgresql_client.pgc"
  char type_location [ 50 ] ;
 /* exec sql end declare section */
-#line 23 "postgresql_client.pgc"
+#line 22 "postgresql_client.pgc"
 
 
     
-    /* declare cursor_ cursor for select s . software_name , s . description , s . size , s . category , s . price , dev . email , dev . fio , dev . organization , p . pkg_name , m . pkg_location , m . type_location from software_info s , software_and_developers sd , developers dev , depend dep , packages p , order_pkg o , methods m where s . software_name = sd . software_name and sd . email = dev . email and s . software_name = dep . software_name and dep . pkg_name = p . pkg_name and s . software_name = o . software_name and o . pkg_location = m . pkg_location */
-#line 27 "postgresql_client.pgc"
+    /* declare cursor_ cursor for select s . software_name , s . description , s . size , s . category , dev . email , dev . fio , dev . organization , dep . pkg_name , m . pkg_location , m . type_location from software_info s , software_and_developers sd , developers dev , depend dep , order_pkg o , methods m where s . software_name = sd . software_name and sd . email = dev . email and s . software_name = dep . software_name and s . software_name = o . software_name and o . pkg_location = m . pkg_location */
+#line 26 "postgresql_client.pgc"
 
     
-    { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_ cursor for select s . software_name , s . description , s . size , s . category , s . price , dev . email , dev . fio , dev . organization , p . pkg_name , m . pkg_location , m . type_location from software_info s , software_and_developers sd , developers dev , depend dep , packages p , order_pkg o , methods m where s . software_name = sd . software_name and sd . email = dev . email and s . software_name = dep . software_name and dep . pkg_name = p . pkg_name and s . software_name = o . software_name and o . pkg_location = m . pkg_location", ECPGt_EOIT, ECPGt_EORT);}
-#line 29 "postgresql_client.pgc"
+    { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_ cursor for select s . software_name , s . description , s . size , s . category , dev . email , dev . fio , dev . organization , dep . pkg_name , m . pkg_location , m . type_location from software_info s , software_and_developers sd , developers dev , depend dep , order_pkg o , methods m where s . software_name = sd . software_name and sd . email = dev . email and s . software_name = dep . software_name and s . software_name = o . software_name and o . pkg_location = m . pkg_location", ECPGt_EOIT, ECPGt_EORT);}
+#line 28 "postgresql_client.pgc"
 
-    printf("software_name |\t description |\t size |\t category |\t price |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
+    printf("software_name |\t description |\t size |\t category |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
     while(1)
     {
         
@@ -85,8 +81,6 @@ void ShowAll() {
 	ECPGt_long,&(size),(long)1,(long)1,sizeof(long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(category),(long)50,(long)1,(50)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
-	ECPGt_char,(price),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(email),(long)100,(long)1,(100)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
@@ -100,17 +94,17 @@ void ShowAll() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(type_location),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 34 "postgresql_client.pgc"
+#line 33 "postgresql_client.pgc"
 
         
         if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
-        printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, price, email, fio, organization, pkg_name, pkg_location, type_location );
+        printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
     }
     
     printf("\n\n");
     
     { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_", ECPGt_EOIT, ECPGt_EORT);}
-#line 42 "postgresql_client.pgc"
+#line 41 "postgresql_client.pgc"
 
 }
 
@@ -122,35 +116,31 @@ void ShowTable1() {
          
          
          
-         
     
-#line 49 "postgresql_client.pgc"
+#line 48 "postgresql_client.pgc"
  char software_name [ 50 ] ;
  
-#line 50 "postgresql_client.pgc"
+#line 49 "postgresql_client.pgc"
  char description [ 255 ] ;
  
-#line 51 "postgresql_client.pgc"
+#line 50 "postgresql_client.pgc"
  long size ;
  
-#line 52 "postgresql_client.pgc"
+#line 51 "postgresql_client.pgc"
  char category [ 50 ] ;
- 
-#line 53 "postgresql_client.pgc"
- char price [ 50 ] ;
 /* exec sql end declare section */
-#line 54 "postgresql_client.pgc"
+#line 52 "postgresql_client.pgc"
 
 
     
     /* declare cursor_1 cursor for select * from software_info */
-#line 58 "postgresql_client.pgc"
+#line 56 "postgresql_client.pgc"
 
     
     { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_1 cursor for select * from software_info", ECPGt_EOIT, ECPGt_EORT);}
-#line 60 "postgresql_client.pgc"
+#line 58 "postgresql_client.pgc"
 
-    printf("software_name |\t description |\t size |\t category |\t price \n");
+    printf("software_name |\t description |\t size |\t category \n");
     while(1)
     {
         
@@ -162,20 +152,18 @@ void ShowTable1() {
 	ECPGt_long,&(size),(long)1,(long)1,sizeof(long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(category),(long)50,(long)1,(50)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
-	ECPGt_char,(price),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 65 "postgresql_client.pgc"
+#line 63 "postgresql_client.pgc"
 
         
         if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
-        printf("%s \t %s \t %ld \t %s \t %s \n", software_name, description, size, category, price );
+        printf("%s \t %s \t %ld \t %s \n", software_name, description, size, category );
     }
     
     printf("\n\n");
     
     { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_1", ECPGt_EOIT, ECPGt_EORT);}
-#line 73 "postgresql_client.pgc"
+#line 71 "postgresql_client.pgc"
 
 }
 
@@ -186,22 +174,22 @@ void ShowTable2() {
          
         
     
-#line 79 "postgresql_client.pgc"
+#line 77 "postgresql_client.pgc"
  char software_name [ 50 ] ;
  
-#line 80 "postgresql_client.pgc"
+#line 78 "postgresql_client.pgc"
  char email [ 100 ] ;
 /* exec sql end declare section */
-#line 82 "postgresql_client.pgc"
+#line 80 "postgresql_client.pgc"
 
 
     
     /* declare cursor_2 cursor for select * from software_and_developers */
-#line 86 "postgresql_client.pgc"
+#line 84 "postgresql_client.pgc"
 
     
     { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_2 cursor for select * from software_and_developers", ECPGt_EOIT, ECPGt_EORT);}
-#line 88 "postgresql_client.pgc"
+#line 86 "postgresql_client.pgc"
 
     printf("software_name |\t e-mail \n");
     while(1) {
@@ -211,7 +199,7 @@ void ShowTable2() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(email),(long)100,(long)1,(100)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 92 "postgresql_client.pgc"
+#line 90 "postgresql_client.pgc"
 
         
         if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
@@ -221,7 +209,7 @@ void ShowTable2() {
     printf("\n\n");
     
     { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_2", ECPGt_EOIT, ECPGt_EORT);}
-#line 100 "postgresql_client.pgc"
+#line 98 "postgresql_client.pgc"
 
 
 }
@@ -259,10 +247,6 @@ void Show() {
             //Show6();
             break;
         }
-        case 7: { 
-            //Show7();
-            break;
-        }
         case 9: { 
             ShowAll();
             break;
@@ -276,44 +260,134 @@ void Show() {
     }
 }
 
-void Insert1() {
 
-    /* exec sql begin declare section */
-         
-         
-         
-         
-         
-    
-#line 157 "postgresql_client.pgc"
+void Update1() {
+
+	/* exec sql begin declare section */
+		 
+		 
+		 
+		 
+	
+#line 152 "postgresql_client.pgc"
  char software_name [ 50 ] ;
  
-#line 158 "postgresql_client.pgc"
+#line 153 "postgresql_client.pgc"
  char description [ 50 ] ;
  
-#line 159 "postgresql_client.pgc"
+#line 154 "postgresql_client.pgc"
  long size ;
  
-#line 160 "postgresql_client.pgc"
+#line 155 "postgresql_client.pgc"
  char category [ 50 ] ;
- 
-#line 161 "postgresql_client.pgc"
- char price [ 255 ] ;
 /* exec sql end declare section */
-#line 162 "postgresql_client.pgc"
+#line 156 "postgresql_client.pgc"
     
-    printf("\nenter 'software_name', please => ");
-    scanf("%s", software_name);
-    printf("\nenter 'description', please => ");
-    scanf("%s", description);
-    printf("\nenter 'size', please => ");
-    scanf("%ld", &size);
-    printf("\nenter 'category', please => ");
-    scanf("%s", category);
-    printf("\nenter 'price', please => ");
-    scanf("%s", price);
+	printf("\nselect updatable 'software_name', please => ");
+	scanf("%s", software_name);
+	printf("\nenter new 'description', please => ");
+	scanf("%s", description);
+	printf("\nenter new 'size', please => ");
+	scanf("%ld", &size);
+	printf("\nenter new 'category', please => ");
+	scanf("%s", category);
+	    
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update software_info set ( description , size , category ) = ( $1  , $2  , $3  ) where software_name = $4 ", 
+	ECPGt_char,(description),(long)50,(long)1,(50)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_long,&(size),(long)1,(long)1,sizeof(long), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,(category),(long)50,(long)1,(50)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,(software_name),(long)50,(long)1,(50)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
+#line 166 "postgresql_client.pgc"
+
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	{ ECPGtrans(__LINE__, NULL, "commit");}
+#line 171 "postgresql_client.pgc"
+
+}
+
+
+void Update() {
+
+	printf("\nChoose one table:");
+	ShowTableList();
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+		Update1();
+		break;
+	    } 
+	    case 2: { 
+		//Update2();
+		break;
+	    } 
+	    case 3: { 
+		//Update3();
+		break;
+	    }
+	    case 4: { 
+		//Update2();
+		break;
+	    }
+	    case 5: { 
+		//Update5();
+		break;
+	    }
+	    case 6: { 
+		//Update6();
+		break;
+	    }
+	    case 0: { 
+		break;
+	    }
+	    default: {
+		printf("Sorry, gay, table with this number does not exist!");
+	    }
+	}
+}
+
+
+
+void Insert1() {
+
+	    /* exec sql begin declare section */
+		 
+		 
+		 
+		 
+	    
+#line 221 "postgresql_client.pgc"
+ char software_name [ 50 ] ;
+ 
+#line 222 "postgresql_client.pgc"
+ char description [ 50 ] ;
+ 
+#line 223 "postgresql_client.pgc"
+ long size ;
+ 
+#line 224 "postgresql_client.pgc"
+ char category [ 50 ] ;
+/* exec sql end declare section */
+#line 225 "postgresql_client.pgc"
     
-    { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into software_info values ( $1  , $2  , $3  , $4  , $5  )", 
+	    printf("\nenter 'software_name', please => ");
+	    scanf("%s", software_name);
+	    printf("\nenter 'description', please => ");
+	    scanf("%s", description);
+	    printf("\nenter 'size', please => ");
+	    scanf("%ld", &size);
+	    printf("\nenter 'category', please => ");
+	    scanf("%s", category);
+	    
+	    { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into software_info values ( $1  , $2  , $3  , $4  )", 
 	ECPGt_char,(software_name),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(description),(long)50,(long)1,(50)*sizeof(char), 
@@ -321,159 +395,157 @@ void Insert1() {
 	ECPGt_long,&(size),(long)1,(long)1,sizeof(long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(category),(long)50,(long)1,(50)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
-	ECPGt_char,(price),(long)255,(long)1,(255)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 174 "postgresql_client.pgc"
+#line 235 "postgresql_client.pgc"
 
-    if( strncmp(sqlca.sqlstate, "00000", 5)) {
-        printf( "%s", sqlca.sqlstate );
-        printf( "\n" );
-    }
-    { ECPGtrans(__LINE__, NULL, "commit");}
-#line 179 "postgresql_client.pgc"
+	    if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	    }
+	    { ECPGtrans(__LINE__, NULL, "commit");}
+#line 240 "postgresql_client.pgc"
 
 }
 
-void Insert()
-{
 
-    printf("\nChoose one table:");
-    ShowTableList();
-    printf("0. For cancel mod \n");
-    int choose = 0;
-    scanf("%d", &choose);
-    switch(choose) {
-        case 1: { 
-            Insert1();
-            break;
-        } 
-        case 2: { 
-            //Insert2();
-            break;
-        } 
-        case 3: { 
-            //Insert3();
-            break;
-        }
-        case 4: { 
-            //Insert2();
-            break;
-        }
-        case 5: { 
-            //Insert5();
-            break;
-        }
-        case 6: { 
-            //Insert6();
-            break;
-        }
-        case 7: { 
-            //Insert7();
-            break;
-        }
-        case 0: { 
-            break;
-        }
-        default: {
-            printf("Sorry, gay, table with this number does not exist!");
-        }
-    }
+void Insert() {
+
+	printf("\nChoose one table:");
+	ShowTableList();
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+		Insert1();
+		break;
+	    } 
+	    case 2: { 
+		//Insert2();
+		break;
+	    } 
+	    case 3: { 
+		//Insert3();
+		break;
+	    }
+	    case 4: { 
+		//Insert2();
+		break;
+	    }
+	    case 5: { 
+		//Insert5();
+		break;
+	    }
+	    case 6: { 
+		//Insert6();
+		break;
+	    }
+	    case 0: { 
+		break;
+	    }
+	    default: {
+		printf("Sorry, gay, table with this number does not exist!");
+	    }
+	}
 }
 
 
 
 void ShowTableList( ) {
-    printf("\n1. software_info\n");
-    printf("2. software_and_developers\n");
-    printf("3. developers\n");
-    printf("4. depend\n");
-    printf("5. packages\n");
-    printf("6. order_pkg\n");
-    printf("7. methods\n\n\n");
+	printf("\n1. software_info\n");
+	printf("2. software_and_developers\n");
+	printf("3. developers\n");
+	printf("4. depend\n");
+	printf("5. order_pkg\n");
+	printf("6. methods\n\n\n");
 }
 
 
 int main() {
 
-    //Connecting with a Data Base
-    /* exec sql begin declare section */
-       
-    
-#line 245 "postgresql_client.pgc"
+	//Connecting with a Data Base
+	/* exec sql begin declare section */
+	   
+	
+#line 301 "postgresql_client.pgc"
  char dbName [ 255 ] , userName [ 100 ] , password [ 100 ] ;
 /* exec sql end declare section */
-#line 246 "postgresql_client.pgc"
+#line 302 "postgresql_client.pgc"
 
  
-    //strcpy(dbName, "freeman@127.0.0.1:5432");
-    //strcpy(userName, "student");
-    //strcpy(password, "tvgu");
-    //strcpy(dbName, "student_db");
-    strcpy(userName, "freeman");
-    strcpy(password, "freeman!login");
-    strcpy(dbName, "soft");
-    if(strlen(userName) > 0) {
-        //EXEC SQL CONNECT TO :dbName USER :userName/:password;
-        { ECPGconnect(__LINE__, 0, dbName , userName , password , NULL, 0); }
-#line 257 "postgresql_client.pgc"
+	//strcpy(dbName, "freeman@127.0.0.1:5432");
+	//strcpy(userName, "student");
+	//strcpy(password, "tvgu");
+	//strcpy(dbName, "student_db");
+	strcpy(userName, "freeman");
+	strcpy(password, "freeman!login");
+	strcpy(dbName, "soft");
+	if(strlen(userName) > 0) {
+		{ ECPGconnect(__LINE__, 0, dbName , userName , password , NULL, 0); }
+#line 312 "postgresql_client.pgc"
 
-    } else {
-        { ECPGconnect(__LINE__, 0, dbName , NULL, NULL , NULL, 0); }
-#line 259 "postgresql_client.pgc"
+	} else {
+		{ ECPGconnect(__LINE__, 0, dbName , NULL, NULL , NULL, 0); }
+#line 314 "postgresql_client.pgc"
 
-    }
-    //Test connecting
-    if( !strncmp(sqlca.sqlstate, "00000", 5)) {
-        printf("\nConnect is ok!\n");
-    }else{
-        printf( "%s", sqlca.sqlstate );
-        printf( "\n" );
-    }
-  
-    bool do_it= true;
-    int item=0;
-    while(do_it) {
-	printf("0. Exit.\n");
-	printf("1. Show.\n");
-	printf("2. Insert.\n");
-	printf("3. Show table list.\n");
-	scanf("%d", &item);
-	switch(item) {
-	    case 0: {
-		do_it=false;
-		break;
-	    }
-	    case 1: {
-		Show();
-		break;
-	    }
-	    case 2: {
-		Insert();
-		break;
-	    }
-	    case 3: {
-		ShowTableList();
-		break;
-	    }
-	    default: {
-		printf("Gay, try again =)\n");
+	}
+	//Test connecting
+	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf("\nConnect is ok!\n");
+	}else{
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+		return 0;
+	}
+	// MENU
+	bool do_it= true;
+	int item=0;
+	while(do_it) {
+	    printf("0. Exit.\n");
+	    printf("1. Show.\n");
+	    printf("2. Insert.\n");
+	    printf("3. Update.\n");
+	    printf("4. Show table list.\n");
+	    scanf("%d", &item);
+	    switch(item) {
+		case 0: {
+		    do_it=false;
+		    break;
+		}
+		case 1: {
+		    Show();
+		    break;
+		}
+		case 2: {
+		    Insert();
+		    break;
+		}
+		case 3: {
+		    Update();
+		    break;
+		}
+		case 4: {
+		    ShowTableList();
+		    break;
+		}
+		default: {
+		    printf("Gay, try again =)\n");
+		}
 	    }
 	}
-    }
-  
-  
-    { ECPGdisconnect(__LINE__, "CURRENT");}
-#line 301 "postgresql_client.pgc"
+      
+      
+	{ ECPGdisconnect(__LINE__, "CURRENT");}
+#line 362 "postgresql_client.pgc"
 
-    if( !strncmp(sqlca.sqlstate, "00000", 5)) {
-        printf("\nDisconnect\n");
-    }else{
-        printf( "%s", sqlca.sqlstate );
-        printf( "\n" );
-    }
- 
-    return 0;
+	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
+	    printf("\nDisconnect\n");
+	}else{
+	    printf( "%s", sqlca.sqlstate );
+	    printf( "\n" );
+	}
+
+	return 0;
 }
 
 
