@@ -214,6 +214,7 @@ void ShowTable2() {
 
 }
 
+
 void Show() {
 
     printf("\nChoose one table:");
@@ -261,6 +262,89 @@ void Show() {
 }
 
 
+void Delete1() {
+
+	/* exec sql begin declare section */
+		 
+		 
+		 
+		 
+	
+#line 153 "postgresql_client.pgc"
+ char software_name [ 50 ] ;
+ 
+#line 154 "postgresql_client.pgc"
+ char description [ 50 ] ;
+ 
+#line 155 "postgresql_client.pgc"
+ long size ;
+ 
+#line 156 "postgresql_client.pgc"
+ char category [ 50 ] ;
+/* exec sql end declare section */
+#line 157 "postgresql_client.pgc"
+    
+	
+	printf("\nselect the deleted 'software_name', please => ");
+	scanf("%s", software_name);
+		    
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from software_info where software_name = $1 ", 
+	ECPGt_char,(software_name),(long)50,(long)1,(50)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
+#line 162 "postgresql_client.pgc"
+
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	{ ECPGtrans(__LINE__, NULL, "commit");}
+#line 167 "postgresql_client.pgc"
+
+}
+
+
+void Delete() {
+
+	printf("\nChoose one table:");
+	ShowTableList();
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+		Delete1();
+		break;
+	    } 
+	    case 2: { 
+		//Delete2();
+		break;
+	    } 
+	    case 3: { 
+		//Delete3();
+		break;
+	    }
+	    case 4: { 
+		//Delete4();
+		break;
+	    }
+	    case 5: { 
+		//Delete5();
+		break;
+	    }
+	    case 6: { 
+		//Delete6();
+		break;
+	    }
+	    case 0: { 
+		break;
+	    }
+	    default: {
+		printf("Sorry, gay, table with this number does not exist!");
+	    }
+	}
+}
+
+ 
 void Update1() {
 
 	/* exec sql begin declare section */
@@ -269,19 +353,19 @@ void Update1() {
 		 
 		 
 	
-#line 152 "postgresql_client.pgc"
+#line 216 "postgresql_client.pgc"
  char software_name [ 50 ] ;
  
-#line 153 "postgresql_client.pgc"
+#line 217 "postgresql_client.pgc"
  char description [ 50 ] ;
  
-#line 154 "postgresql_client.pgc"
+#line 218 "postgresql_client.pgc"
  long size ;
  
-#line 155 "postgresql_client.pgc"
+#line 219 "postgresql_client.pgc"
  char category [ 50 ] ;
 /* exec sql end declare section */
-#line 156 "postgresql_client.pgc"
+#line 220 "postgresql_client.pgc"
     
 	printf("\nselect updatable 'software_name', please => ");
 	scanf("%s", software_name);
@@ -301,14 +385,14 @@ void Update1() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(software_name),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 166 "postgresql_client.pgc"
+#line 230 "postgresql_client.pgc"
 
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
 		printf( "\n" );
 	}
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 171 "postgresql_client.pgc"
+#line 235 "postgresql_client.pgc"
 
 }
 
@@ -355,7 +439,6 @@ void Update() {
 }
 
 
-
 void Insert1() {
 
 	    /* exec sql begin declare section */
@@ -364,19 +447,19 @@ void Insert1() {
 		 
 		 
 	    
-#line 221 "postgresql_client.pgc"
+#line 284 "postgresql_client.pgc"
  char software_name [ 50 ] ;
  
-#line 222 "postgresql_client.pgc"
+#line 285 "postgresql_client.pgc"
  char description [ 50 ] ;
  
-#line 223 "postgresql_client.pgc"
+#line 286 "postgresql_client.pgc"
  long size ;
  
-#line 224 "postgresql_client.pgc"
+#line 287 "postgresql_client.pgc"
  char category [ 50 ] ;
 /* exec sql end declare section */
-#line 225 "postgresql_client.pgc"
+#line 288 "postgresql_client.pgc"
     
 	    printf("\nenter 'software_name', please => ");
 	    scanf("%s", software_name);
@@ -396,14 +479,14 @@ void Insert1() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(category),(long)50,(long)1,(50)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 235 "postgresql_client.pgc"
+#line 298 "postgresql_client.pgc"
 
 	    if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
 		printf( "\n" );
 	    }
 	    { ECPGtrans(__LINE__, NULL, "commit");}
-#line 240 "postgresql_client.pgc"
+#line 303 "postgresql_client.pgc"
 
 }
 
@@ -450,7 +533,6 @@ void Insert() {
 }
 
 
-
 void ShowTableList( ) {
 	printf("\n1. software_info\n");
 	printf("2. software_and_developers\n");
@@ -467,10 +549,10 @@ int main() {
 	/* exec sql begin declare section */
 	   
 	
-#line 301 "postgresql_client.pgc"
+#line 363 "postgresql_client.pgc"
  char dbName [ 255 ] , userName [ 100 ] , password [ 100 ] ;
 /* exec sql end declare section */
-#line 302 "postgresql_client.pgc"
+#line 364 "postgresql_client.pgc"
 
  
 	//strcpy(dbName, "freeman@127.0.0.1:5432");
@@ -482,11 +564,11 @@ int main() {
 	strcpy(dbName, "soft");
 	if(strlen(userName) > 0) {
 		{ ECPGconnect(__LINE__, 0, dbName , userName , password , NULL, 0); }
-#line 312 "postgresql_client.pgc"
+#line 374 "postgresql_client.pgc"
 
 	} else {
 		{ ECPGconnect(__LINE__, 0, dbName , NULL, NULL , NULL, 0); }
-#line 314 "postgresql_client.pgc"
+#line 376 "postgresql_client.pgc"
 
 	}
 	//Test connecting
@@ -501,11 +583,12 @@ int main() {
 	bool do_it= true;
 	int item=0;
 	while(do_it) {
-	    printf("0. Exit.\n");
+	    printf("\n\n\n0. Exit.\n");
 	    printf("1. Show.\n");
 	    printf("2. Insert.\n");
 	    printf("3. Update.\n");
-	    printf("4. Show table list.\n");
+	    printf("4. Delete.\n");
+	    printf("5. Show table list.\n\n");
 	    scanf("%d", &item);
 	    switch(item) {
 		case 0: {
@@ -525,6 +608,10 @@ int main() {
 		    break;
 		}
 		case 4: {
+		    Delete();
+		    break;
+		}
+		case 5: {
 		    ShowTableList();
 		    break;
 		}
@@ -536,7 +623,7 @@ int main() {
       
       
 	{ ECPGdisconnect(__LINE__, "CURRENT");}
-#line 362 "postgresql_client.pgc"
+#line 429 "postgresql_client.pgc"
 
 	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
 	    printf("\nDisconnect\n");

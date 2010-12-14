@@ -99,6 +99,7 @@ void ShowTable2() {
 
 }
 
+
 void Show() {
 
     printf("\nChoose one table:");
@@ -146,6 +147,69 @@ void Show() {
 }
 
 
+void Delete1() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char description[50];
+		long size;
+		char category[50];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nselect the deleted 'software_name', please => ");
+	scanf("%s", software_name);
+		    
+	EXEC SQL DELETE FROM software_info WHERE software_name = :software_name ;
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Delete() {
+
+	printf("\nChoose one table:");
+	ShowTableList();
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+		Delete1();
+		break;
+	    } 
+	    case 2: { 
+		//Delete2();
+		break;
+	    } 
+	    case 3: { 
+		//Delete3();
+		break;
+	    }
+	    case 4: { 
+		//Delete4();
+		break;
+	    }
+	    case 5: { 
+		//Delete5();
+		break;
+	    }
+	    case 6: { 
+		//Delete6();
+		break;
+	    }
+	    case 0: { 
+		break;
+	    }
+	    default: {
+		printf("Sorry, gay, table with this number does not exist!");
+	    }
+	}
+}
+
+ 
 void Update1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
@@ -212,7 +276,6 @@ void Update() {
 	    }
 	}
 }
-
 
 
 void Insert1() {
@@ -283,7 +346,6 @@ void Insert() {
 }
 
 
-
 void ShowTableList( ) {
 	printf("\n1. software_info\n");
 	printf("2. software_and_developers\n");
@@ -329,7 +391,8 @@ int main() {
 	    printf("1. Show.\n");
 	    printf("2. Insert.\n");
 	    printf("3. Update.\n");
-	    printf("4. Show table list.\n\n");
+	    printf("4. Delete.\n");
+	    printf("5. Show table list.\n\n");
 	    scanf("%d", &item);
 	    switch(item) {
 		case 0: {
@@ -349,6 +412,10 @@ int main() {
 		    break;
 		}
 		case 4: {
+		    Delete();
+		    break;
+		}
+		case 5: {
 		    ShowTableList();
 		    break;
 		}
