@@ -32,7 +32,7 @@ void ShowAll() {
         
         EXEC SQL FETCH cursor_ INTO :software_name, :description, :size, :category, :email, :fio, :organization, :pkg_name, :pkg_location, :type_location ;
         
-        if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
+        if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
         printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
     }
     
@@ -44,31 +44,30 @@ void ShowAll() {
 
 void ShowTable1() {
    
-    EXEC SQL BEGIN DECLARE SECTION;
-        char software_name[50];
-        char description[255];
-        long size;
-        char category[50];
-    EXEC SQL END DECLARE SECTION;
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char description[255];
+		long size;
+		char category[50];
+	EXEC SQL END DECLARE SECTION;
 
-    
-    EXEC SQL DECLARE cursor_1 CURSOR FOR
-        SELECT * FROM software_info;
-    
-    EXEC SQL OPEN cursor_1;
-    printf("software_name |\t description |\t size |\t category \n");
-    while(1)
-    {
-        
-        EXEC SQL FETCH cursor_1 INTO :software_name, :description, :size, :category;
-        
-        if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
-        printf("%s \t %s \t %ld \t %s \n", software_name, description, size, category );
-    }
-    
-    printf("\n\n");
-    
-    EXEC SQL CLOSE cursor_1;
+	    
+	EXEC SQL DECLARE cursor_1 CURSOR FOR
+		SELECT software_name, description, size, category FROM software_info;
+	    
+	EXEC SQL OPEN cursor_1;
+	printf("software_name |\t description |\t size |\t category \n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_1 INTO :software_name, :description, :size, :category;
+		
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+		printf("%s \t %s \t %ld \t %s \n", software_name, description, size, category );
+	}
+	    
+	printf("\n\n");
+	    
+	EXEC SQL CLOSE cursor_1;
 }
 
 
@@ -81,7 +80,7 @@ void ShowTable2() {
 
     
     EXEC SQL DECLARE cursor_2 CURSOR FOR
-        SELECT * FROM software_and_developers;
+        SELECT software_name, email FROM software_and_developers;
     
     EXEC SQL OPEN cursor_2;
     printf("software_name |\t e-mail \n");
@@ -89,13 +88,122 @@ void ShowTable2() {
         
         EXEC SQL FETCH cursor_2 INTO :software_name, :email;
         
-        if (sqlca.sqlcode == ECPG_NOT_FOUND) break;        
+        if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
         printf("%s \t %s \n", software_name, email);
     }
     
     printf("\n\n");
     
     EXEC SQL CLOSE cursor_2;
+
+}
+
+
+void ShowTable3() {
+   
+	EXEC SQL BEGIN DECLARE SECTION;
+		char email[100];
+		char fio[150];
+		char organization[150];
+	EXEC SQL END DECLARE SECTION;
+
+	    
+	EXEC SQL DECLARE cursor_3 CURSOR FOR
+		SELECT fio, email, organization FROM developers;
+	    
+	EXEC SQL OPEN cursor_3;
+	printf("e-mail |\t fio |\t organization \n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_3 INTO :fio, :email, :organization;
+		
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;       
+		printf("%s \t %s \t %s \n", fio, email, organization);
+	}
+	    
+	printf("\n\n");
+	    
+	EXEC SQL CLOSE cursor_3;
+}
+
+
+void ShowTable4() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_name[150];
+	EXEC SQL END DECLARE SECTION;
+
+      
+	EXEC SQL DECLARE cursor_4 CURSOR FOR
+		SELECT software_name, pkg_name FROM depend;
+      
+	EXEC SQL OPEN cursor_4;
+	printf("software_name |\t pkg_name \n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_4 INTO :software_name, :pkg_name;
+	  
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+		printf("%s \t %s \n", software_name, pkg_name);
+	}
+      
+	printf("\n\n");
+      
+	EXEC SQL CLOSE cursor_4;
+
+}
+
+
+void ShowTable5() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;
+
+      
+	EXEC SQL DECLARE cursor_5 CURSOR FOR
+		SELECT software_name, pkg_location FROM order_pkg;
+      
+	EXEC SQL OPEN cursor_5;
+	printf("software_name |\t pkg_location \n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_5 INTO :software_name, :pkg_location;
+	  
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+		printf("%s \t %s \n", software_name, pkg_location);
+	}
+      
+	printf("\n\n");
+      
+	EXEC SQL CLOSE cursor_5;
+
+}
+
+
+void ShowTable6() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char pkg_location[150];
+		char type_location[50];
+	EXEC SQL END DECLARE SECTION;
+
+      
+	EXEC SQL DECLARE cursor_6 CURSOR FOR
+		SELECT pkg_location, type_location FROM methods;
+      
+	EXEC SQL OPEN cursor_6;
+	printf("pkg_location |\t type_location \n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_6 INTO :pkg_location, :type_location;
+	  
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+		printf("%s \t %s \n", pkg_location, type_location);
+	}
+      
+	printf("\n\n");
+      
+	EXEC SQL CLOSE cursor_6;
 
 }
 
@@ -118,19 +226,19 @@ void Show() {
             break;
         } 
         case 3: { 
-            //Show3();
+            ShowTable3();
             break;
         }
         case 4: { 
-            //Show2();
+            ShowTable4();
             break;
         }
         case 5: { 
-            //Show5();
+            ShowTable5();
             break;
         }
         case 6: { 
-            //Show6();
+            ShowTable6();
             break;
         }
         case 9: { 
@@ -356,34 +464,7 @@ void ShowTableList( ) {
 }
 
 
-int main() {
-
-	//Connecting with a Data Base
-	EXEC SQL BEGIN DECLARE SECTION;
-	char dbName[255], userName[100], password[100];
-	EXEC SQL END DECLARE SECTION;
- 
-	//strcpy(dbName, "freeman@127.0.0.1:5432");
-	//strcpy(userName, "student");
-	//strcpy(password, "tvgu");
-	//strcpy(dbName, "student_db");
-	strcpy(userName, "freeman");
-	strcpy(password, "freeman!login");
-	strcpy(dbName, "soft");
-	if(strlen(userName) > 0) {
-		EXEC SQL CONNECT TO :dbName USER :userName IDENTIFIED BY :password;
-	} else {
-		EXEC SQL CONNECT TO :dbName;
-	}
-	//Test connecting
-	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
-		printf("\nConnect is ok!\n");
-	}else{
-		printf( "%s", sqlca.sqlstate );
-		printf( "\n" );
-		return 0;
-	}
-	// MENU
+void Menu( ) {
 	bool do_it= true;
 	int item=0;
 	while(do_it) {
@@ -424,7 +505,38 @@ int main() {
 		}
 	    }
 	}
-      
+}
+
+
+int main() {
+
+	//Connecting with a Data Base
+	EXEC SQL BEGIN DECLARE SECTION;
+	char dbName[255], userName[100], password[100];
+	EXEC SQL END DECLARE SECTION;
+ 
+	//strcpy(dbName, "freeman@127.0.0.1:5432");
+	//strcpy(userName, "student");
+	//strcpy(password, "tvgu");
+	//strcpy(dbName, "student_db");
+	strcpy(userName, "freeman");
+	strcpy(password, "freeman!login");
+	strcpy(dbName, "soft");
+	if(strlen(userName) > 0) {
+		EXEC SQL CONNECT TO :dbName USER :userName IDENTIFIED BY :password;
+	} else {
+		EXEC SQL CONNECT TO :dbName;
+	}
+	//Test connecting
+	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf("\nConnect is ok!\n");
+	}else{
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+		return 0;
+	}
+	
+	Menu();
       
 	EXEC SQL disconnect;
 	if( !strncmp(sqlca.sqlstate, "00000", 5)) {
