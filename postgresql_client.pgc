@@ -68,6 +68,9 @@ void ShowTable1() {
 	printf("\n\n");
 	    
 	EXEC SQL CLOSE cursor_1;
+	
+	
+	//EXEC SQL DEALLOCATE PREPARE name;
 }
 
 
@@ -112,7 +115,7 @@ void ShowTable3() {
 		SELECT fio, email, organization FROM developers;
 	    
 	EXEC SQL OPEN cursor_3;
-	printf("e-mail |\t fio |\t organization \n");
+	printf("fio |\t e-mail |\t organization \n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_3 INTO :fio, :email, :organization;
@@ -210,48 +213,48 @@ void ShowTable6() {
 
 void Show() {
 
-    printf("\nChoose one table:");
-    ShowTableList();
-    printf("9. For show all tables \n");
-    printf("0. For cancel mod \n");
-    int choose = 0;
-    scanf("%d", &choose);
-    switch(choose) {
-        case 1: { 
-            ShowTable1();
-            break;
-        } 
-        case 2: { 
-            ShowTable2();
-            break;
-        } 
-        case 3: { 
-            ShowTable3();
-            break;
-        }
-        case 4: { 
-            ShowTable4();
-            break;
-        }
-        case 5: { 
-            ShowTable5();
-            break;
-        }
-        case 6: { 
-            ShowTable6();
-            break;
-        }
-        case 9: { 
-            ShowAll();
-            break;
-        }
-	case 0: { 
-            break;
-        }
-        default: {
-            printf("Sorry, gay, table with this number does not exist!");
-        }
-    }
+	printf("\nChoose one table:");
+	ShowTableList();
+	printf("9. For show all tables \n");
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+			ShowTable1();
+			break;
+		} 
+		case 2: { 
+			ShowTable2();
+			break;
+		} 
+		case 3: { 
+			ShowTable3();
+			break;
+		}
+		case 4: { 
+			ShowTable4();
+			break;
+		}
+		case 5: { 
+			ShowTable5();
+			break;
+		}
+		case 6: { 
+			ShowTable6();
+			break;
+		}
+		case 9: { 
+			ShowAll();
+			break;
+		}
+		case 0: { 
+			break;
+		}
+		default: {
+			printf("Sorry, gay, table with this number does not exist!");
+		}
+	}
 }
 
 
@@ -344,6 +347,185 @@ void Update1() {
 }
 
 
+void Update2() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char email[100];
+		char software_name[50];
+	EXEC SQL END DECLARE SECTION;    
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. e-mail.\n");
+	printf("2. software_name.\n");
+	scanf("%d", &item);
+	if(item == 1) {
+		printf("\nselect updatable 'email', please => ");
+		scanf("%s", email);
+		printf("\nenter new 'software_name', please => ");
+		scanf("%s", software_name);
+		    
+		EXEC SQL UPDATE software_and_developers SET (software_name ) = ( :software_name) WHERE email = :email;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else if (item == 2) {
+		printf("\nselect updatable 'software_name', please => ");
+		scanf("%s", software_name);
+		printf("\nenter new 'email', please => ");
+		scanf("%s", email);
+			    
+		EXEC SQL UPDATE software_and_developers SET (email ) = ( :email) WHERE software_name = :software_name;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else { }
+	
+	EXEC SQL COMMIT;
+}
+
+
+void Update3() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char email[100];
+		char fio[150];
+		char organization[150];
+	EXEC SQL END DECLARE SECTION;    
+	printf("\nselect updatable 'email', please => ");
+	scanf("%s", email);
+	printf("\nenter new 'fio', please => ");
+	scanf("%s", fio);
+	printf("\nenter new 'organization', please => ");
+	scanf("%s", organization);
+	    
+	EXEC SQL UPDATE developers SET (fio,organization) = (  :fio, :organization) WHERE email = :email ;
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Update4() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_name[150];
+	EXEC SQL END DECLARE SECTION;    
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. software_name.\n");
+	printf("2. pkg_name.\n");
+	scanf("%d", &item);
+	if(item == 1) {
+		printf("\nselect updatable 'software_name', please => ");
+		scanf("%s", software_name);
+		printf("\nenter new 'pkg_name', please => ");
+		scanf("%s", pkg_name);
+		    
+		EXEC SQL UPDATE depend SET (pkg_name ) = ( :pkg_name) WHERE software_name = :software_name;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else if (item == 2) {
+		printf("\nselect updatable 'pkg_name', please => ");
+		scanf("%s", pkg_name);
+		printf("\nenter new 'software_name', please => ");
+		scanf("%s", software_name);
+			    
+		EXEC SQL UPDATE depend SET software_name = :software_name WHERE pkg_name = :pkg_name;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else { }
+	
+	EXEC SQL COMMIT;
+}
+
+
+void Update5() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;    
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. software_name.\n");
+	printf("2. pkg_location.\n");
+	scanf("%d", &item);
+	if(item == 1) {
+		printf("\nselect updatable 'software_name', please => ");
+		scanf("%s", software_name);
+		printf("\nenter new 'pkg_location', please => ");
+		scanf("%s", pkg_location);
+		    
+		EXEC SQL UPDATE order_pkg SET (pkg_location ) = ( :pkg_location) WHERE software_name = :software_name;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else if (item == 2) {
+		printf("\nselect updatable 'pkg_location', please => ");
+		scanf("%s", pkg_location);
+		printf("\nenter new 'software_name', please => ");
+		scanf("%s", software_name);
+			    
+		EXEC SQL UPDATE order_pkg SET software_name = :software_name WHERE pkg_location = :pkg_location;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else { }
+	
+	EXEC SQL COMMIT;
+}
+
+
+void Update6() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char type_location[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;    
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. type_location.\n");
+	printf("2. pkg_location.\n");
+	scanf("%d", &item);
+	if(item == 1) {
+		printf("\nselect updatable 'type_location', please => ");
+		scanf("%s", type_location);
+		printf("\nenter new 'pkg_location', please => ");
+		scanf("%s", pkg_location);
+		    
+		EXEC SQL UPDATE methods SET (pkg_location ) = ( :pkg_location) WHERE type_location = :type_location;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else if (item == 2) {
+		printf("\nselect updatable 'pkg_location', please => ");
+		scanf("%s", pkg_location);
+		printf("\nenter new 'type_location', please => ");
+		scanf("%s", type_location);
+			    
+		EXEC SQL UPDATE methods SET type_location = :type_location WHERE pkg_location = :pkg_location;
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
+	} else { }
+	
+	EXEC SQL COMMIT;
+}
+
+
 void Update() {
 
 	printf("\nChoose one table:");
@@ -357,23 +539,23 @@ void Update() {
 		break;
 	    } 
 	    case 2: { 
-		//Update2();
+		Update2();
 		break;
 	    } 
 	    case 3: { 
-		//Update3();
+		Update3();
 		break;
 	    }
 	    case 4: { 
-		//Update2();
+		Update4();
 		break;
 	    }
 	    case 5: { 
-		//Update5();
+		Update5();
 		break;
 	    }
 	    case 6: { 
-		//Update6();
+		Update6();
 		break;
 	    }
 	    case 0: { 
@@ -388,27 +570,135 @@ void Update() {
 
 void Insert1() {
 
-	    EXEC SQL BEGIN DECLARE SECTION;
+	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[50];
 		char description[50];
 		long size;
 		char category[50];
-	    EXEC SQL END DECLARE SECTION;    
-	    printf("\nenter 'software_name', please => ");
-	    scanf("%s", software_name);
-	    printf("\nenter 'description', please => ");
-	    scanf("%s", description);
-	    printf("\nenter 'size', please => ");
-	    scanf("%ld", &size);
-	    printf("\nenter 'category', please => ");
-	    scanf("%s", category);
+	EXEC SQL END DECLARE SECTION;    
+	printf("\nenter 'software_name', please => ");
+	scanf("%s", software_name);
+	printf("\nenter 'description', please => ");
+	scanf("%s", description);
+	printf("\nenter 'size', please => ");
+	scanf("%ld", &size);
+	printf("\nenter 'category', please => ");
+	scanf("%s", category);
 	    
-	    EXEC SQL INSERT INTO software_info VALUES(:software_name, :description, :size, :category);
-	    if( strncmp(sqlca.sqlstate, "00000", 5)) {
+	EXEC SQL INSERT INTO software_info VALUES(:software_name, :description, :size, :category);
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
 		printf( "\n" );
-	    }
-	    EXEC SQL COMMIT;
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Insert2() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char email[100];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nenter 'software_name', please => ");
+	scanf("%s", software_name);
+	printf("\nenter 'email', please => ");
+	scanf("%s", email);
+    
+	EXEC SQL INSERT INTO software_and_developers VALUES(:email, :software_name);
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Insert3() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char email[100];
+		char fio[150];
+		char organization[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nenter 'email', please => ");
+	scanf("%s", email);
+	printf("\nenter 'fio', please => ");
+	scanf("%s", fio);
+	printf("\nenter 'organization', please => ");
+	scanf("%s", organization);
+    
+	EXEC SQL INSERT INTO developers VALUES(:email, :fio, :organization);
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Insert4() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_name[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nenter 'software_name', please => ");
+	scanf("%s", software_name);
+	printf("\nenter 'pkg_name', please => ");
+	scanf("%s", pkg_name);
+    
+	EXEC SQL INSERT INTO depend VALUES(:software_name, :pkg_name);
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Insert5() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nenter 'software_name', please => ");
+	scanf("%s", software_name);
+	printf("\nenter 'pkg_location', please => ");
+	scanf("%s", pkg_location);
+    
+	EXEC SQL INSERT INTO order_pkg VALUES(:software_name, :pkg_location);
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Insert6() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char pkg_location[150];
+		char type_location[50];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nenter 'pkg_location', please => ");
+	scanf("%s", pkg_location);
+	printf("\nenter 'type_location', please => ");
+	scanf("%s", type_location);
+    
+	EXEC SQL INSERT INTO methods VALUES(:pkg_location, :type_location);
+		if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
 }
 
 
@@ -425,23 +715,23 @@ void Insert() {
 		break;
 	    } 
 	    case 2: { 
-		//Insert2();
+		Insert2();
 		break;
 	    } 
 	    case 3: { 
-		//Insert3();
+		Insert3();
 		break;
 	    }
 	    case 4: { 
-		//Insert2();
+		Insert4();
 		break;
 	    }
 	    case 5: { 
-		//Insert5();
+		Insert5();
 		break;
 	    }
 	    case 6: { 
-		//Insert6();
+		Insert6();
 		break;
 	    }
 	    case 0: { 
@@ -516,11 +806,11 @@ int main() {
 	EXEC SQL END DECLARE SECTION;
  
 	//strcpy(dbName, "freeman@127.0.0.1:5432");
-	//strcpy(userName, "student");
-	//strcpy(password, "tvgu");
+	strcpy(userName, "");
+	strcpy(password, "");
 	//strcpy(dbName, "student_db");
-	strcpy(userName, "freeman");
-	strcpy(password, "freeman!login");
+	//strcpy(userName, "freeman");
+	//strcpy(password, "freeman!login");
 	strcpy(dbName, "soft");
 	if(strlen(userName) > 0) {
 		EXEC SQL CONNECT TO :dbName USER :userName IDENTIFIED BY :password;
@@ -551,6 +841,6 @@ int main() {
 
 
 //ecpg postgresql_client.pgc
-//gcc postgres_client.c -I /usr/include/pgsql/ -lecpg -o postgres_client -Wextra -g
+//gcc postgresql_client.c -I /usr/include/pgsql/ -lecpg -o postgresql_client -Wextra -g
 //gcc postgresql_client.c -I /usr/include/postgresql/ -lecpg -o postgresql_client -Wextra -g
 //./postgresql_client
