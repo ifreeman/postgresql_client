@@ -279,6 +279,242 @@ void Delete1() {
 }
 
 
+void Delete2() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char email[100];
+	EXEC SQL END DECLARE SECTION;    
+	
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. software_name.\n");
+	printf("2. e-mail.\n");
+	printf("3. both.\n");
+	scanf("%d", &item);
+	switch(item) {
+		case 1: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			    
+			EXEC SQL DELETE FROM software_and_developers WHERE software_name = :software_name ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 2: {
+			printf("\nselect the deleted 'email', please => ");
+			scanf("%s", email);
+			    
+			EXEC SQL DELETE FROM software_and_developers WHERE email = :email ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 3: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			printf("\nselect the deleted 'email', please => ");
+			scanf("%s", email);
+			    
+			EXEC SQL DELETE FROM software_and_developers WHERE email = :email AND software_name = :software_name;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Delete3() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char email[100];
+		char fio[150];
+		char organization[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	printf("\nselect the deleted 'email', please => ");
+	scanf("%s", email);
+		    
+	EXEC SQL DELETE FROM developers WHERE email = :email ;
+	if( strncmp(sqlca.sqlstate, "00000", 5)) {
+		printf( "%s", sqlca.sqlstate );
+		printf( "\n" );
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Delete4() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_name[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. software_name.\n");
+	printf("2. pkg_name.\n");
+	printf("3. both.\n");
+	scanf("%d", &item);
+	switch(item) {
+		case 1: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			    
+			EXEC SQL DELETE FROM depend WHERE software_name = :software_name ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 2: {
+			printf("\nselect the deleted 'pkg_name', please => ");
+			scanf("%s", pkg_name);
+			    
+			EXEC SQL DELETE FROM depend WHERE pkg_name = :pkg_name ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 3: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			printf("\nselect the deleted 'pkg_name', please => ");
+			scanf("%s", pkg_name);
+			    
+			EXEC SQL DELETE FROM depend WHERE pkg_name = :pkg_name AND software_name = :software_name;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Delete5() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. software_name.\n");
+	printf("2. pkg_location.\n");
+	printf("3. both.\n");
+	scanf("%d", &item);
+	switch(item) {
+		case 1: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			    
+			EXEC SQL DELETE FROM order_pkg WHERE software_name = :software_name ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 2: {
+			printf("\nselect the deleted 'pkg_location', please => ");
+			scanf("%s", pkg_location);
+			    
+			EXEC SQL DELETE FROM order_pkg WHERE pkg_location = :pkg_location ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 3: {
+			printf("\nselect the deleted 'software_name', please => ");
+			scanf("%s", software_name);
+			printf("\nselect the deleted 'pkg_location', please => ");
+			scanf("%s", pkg_location);
+			    
+			EXEC SQL DELETE FROM order_pkg WHERE pkg_location = :pkg_location AND software_name = :software_name;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+	}
+	EXEC SQL COMMIT;
+}
+
+
+void Delete6() {
+
+	EXEC SQL BEGIN DECLARE SECTION;
+		char type_location[50];
+		char pkg_location[150];
+	EXEC SQL END DECLARE SECTION;    
+	
+	int item = 0;
+	printf("choose table field for search, please =>\n");
+	printf("1. type_location.\n");
+	printf("2. pkg_location.\n");
+	printf("3. both.\n");
+	scanf("%d", &item);
+	switch(item) {
+		case 1: {
+			printf("\nselect the deleted 'type_location', please => ");
+			scanf("%s", type_location);
+			    
+			EXEC SQL DELETE FROM methods WHERE type_location = :type_location ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 2: {
+			printf("\nselect the deleted 'pkg_location', please => ");
+			scanf("%s", pkg_location);
+			    
+			EXEC SQL DELETE FROM methods WHERE pkg_location = :pkg_location ;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+		case 3: {
+			printf("\nselect the deleted 'pkg_location', please => ");
+			scanf("%s", pkg_location);
+			printf("\nselect the deleted 'type_location', please => ");
+			scanf("%s", type_location);
+			    
+			EXEC SQL DELETE FROM methods WHERE pkg_location = :pkg_location AND type_location = :type_location;
+			if( strncmp(sqlca.sqlstate, "00000", 5)) {
+				printf( "%s", sqlca.sqlstate );
+				printf( "\n" );
+			}
+			break;
+		}
+	}
+	EXEC SQL COMMIT;
+}
+
+
 void Delete() {
 
 	printf("\nChoose one table:");
@@ -292,23 +528,23 @@ void Delete() {
 		break;
 	    } 
 	    case 2: { 
-		//Delete2();
+		Delete2();
 		break;
 	    } 
 	    case 3: { 
-		//Delete3();
+		Delete3();
 		break;
 	    }
 	    case 4: { 
-		//Delete4();
+		Delete4();
 		break;
 	    }
 	    case 5: { 
-		//Delete5();
+		Delete5();
 		break;
 	    }
 	    case 6: { 
-		//Delete6();
+		Delete6();
 		break;
 	    }
 	    case 0: { 
@@ -809,8 +1045,8 @@ int main() {
 	strcpy(userName, "");
 	strcpy(password, "");
 	//strcpy(dbName, "student_db");
-	//strcpy(userName, "freeman");
-	//strcpy(password, "freeman!login");
+	//strcpy(userName, "student");
+	//strcpy(password, "tvgu");
 	strcpy(dbName, "soft");
 	if(strlen(userName) > 0) {
 		EXEC SQL CONNECT TO :dbName USER :userName IDENTIFIED BY :password;
