@@ -252,7 +252,7 @@ void Show() {
 			break;
 		}
 		default: {
-			printf("Sorry, gay, table with this number does not exist!");
+			printf("Sorry, guy, table with this number does not exist!");
 		}
 	}
 }
@@ -551,7 +551,7 @@ void Delete() {
 		break;
 	    }
 	    default: {
-		printf("Sorry, gay, table with this number does not exist!");
+		printf("Sorry, guy, table with this number does not exist!");
 	    }
 	}
 }
@@ -798,7 +798,7 @@ void Update() {
 		break;
 	    }
 	    default: {
-		printf("Sorry, gay, table with this number does not exist!");
+		printf("Sorry, guy, table with this number does not exist!");
 	    }
 	}
 }
@@ -974,7 +974,7 @@ void Insert() {
 		break;
 	    }
 	    default: {
-		printf("Sorry, gay, table with this number does not exist!");
+		printf("Sorry, guy, table with this number does not exist!");
 	    }
 	}
 }
@@ -1027,7 +1027,7 @@ void Menu( ) {
 		    break;
 		}
 		default: {
-		    printf("Gay, try again =)\n");
+		    printf("Guy, try again =)\n");
 		}
 	    }
 	}
