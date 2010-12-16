@@ -6,39 +6,59 @@
 
 void ShowTableList( );
 
+void Read( char* res ) {
+        int isSpace = 0;
+        int index = 0;
+        while( isSpace == 0 ) {
+                index = 0;
+                char ch = getchar();
+                while( ch != '\n' ) {
+                        res[index] = ch;
+                        index = index + 1;
+                        if( !isspace(ch) ) {
+                                isSpace = 1;
+                        }
+                        ch = getchar();
+                }
+                res[index] = 0;
+                index = 0;
+        }
+}
+
+
 
 void ShowAll() {
-    EXEC SQL BEGIN DECLARE SECTION;
-        char software_name[50];
-        char description[255];
-        long size;
-        char category[50];
-        char email[100];
-        char fio[150];
-        char organization[150];
-        char pkg_name[150];
-        char pkg_location[150];
-        char type_location[50];
-    EXEC SQL END DECLARE SECTION;
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[50];
+		char description[255];
+		long size;
+		char category[50];
+		char email[100];
+		char fio[150];
+		char organization[150];
+		char pkg_name[150];
+		char pkg_location[150];
+		char type_location[50];
+	EXEC SQL END DECLARE SECTION;
 
-    
-    EXEC SQL DECLARE cursor_ CURSOR FOR
-        SELECT s.software_name, s.description, s.size, s.category, dev.email, dev.fio, dev.organization, dep.pkg_name, m.pkg_location, m.type_location  FROM software_info s, software_and_developers sd, developers dev, depend dep, order_pkg o, methods m where s.software_name=sd.software_name AND sd.email=dev.email AND s.software_name=dep.software_name AND s.software_name=o.software_name AND o.pkg_location=m.pkg_location;
-    
-    EXEC SQL OPEN cursor_;
-    printf("software_name |\t description |\t size |\t category |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
-    while(1)
-    {
-        
-        EXEC SQL FETCH cursor_ INTO :software_name, :description, :size, :category, :email, :fio, :organization, :pkg_name, :pkg_location, :type_location ;
-        
-        if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-        printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
-    }
-    
-    printf("\n\n");
-    
-    EXEC SQL CLOSE cursor_;
+	
+	EXEC SQL DECLARE cursor_ CURSOR FOR
+		SELECT s.software_name, s.description, s.size, s.category, dev.email, dev.fio, dev.organization, dep.pkg_name, m.pkg_location, m.type_location  FROM software_info s, software_and_developers sd, developers dev, depend dep, order_pkg o, methods m where s.software_name=sd.software_name AND sd.email=dev.email AND s.software_name=dep.software_name AND s.software_name=o.software_name AND o.pkg_location=m.pkg_location;
+	
+	EXEC SQL OPEN cursor_;
+	printf("software_name |\t description |\t size |\t category |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
+	while(1)
+	{
+	    
+		EXEC SQL FETCH cursor_ INTO :software_name, :description, :size, :category, :email, :fio, :organization, :pkg_name, :pkg_location, :type_location ;
+	    
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+		printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
+	}
+	
+	printf("\n\n");
+	
+	EXEC SQL CLOSE cursor_;
 }
 
 
@@ -262,13 +282,13 @@ void Delete1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[50];
-		char description[50];
+		char description[255];
 		long size;
 		char category[50];
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nselect the deleted 'software_name', please => ");
-	scanf("%s", software_name);
+	Read(  software_name);
 		    
 	EXEC SQL DELETE FROM software_info WHERE software_name = :software_name ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -295,7 +315,7 @@ void Delete2() {
 	switch(item) {
 		case 1: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read(  software_name);
 			    
 			EXEC SQL DELETE FROM software_and_developers WHERE software_name = :software_name ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -306,7 +326,7 @@ void Delete2() {
 		}
 		case 2: {
 			printf("\nselect the deleted 'email', please => ");
-			scanf("%s", email);
+			Read(  email);
 			    
 			EXEC SQL DELETE FROM software_and_developers WHERE email = :email ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -317,9 +337,9 @@ void Delete2() {
 		}
 		case 3: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read( software_name);
 			printf("\nselect the deleted 'email', please => ");
-			scanf("%s", email);
+			Read( email);
 			    
 			EXEC SQL DELETE FROM software_and_developers WHERE email = :email AND software_name = :software_name;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -342,7 +362,7 @@ void Delete3() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nselect the deleted 'email', please => ");
-	scanf("%s", email);
+	Read( email);
 		    
 	EXEC SQL DELETE FROM developers WHERE email = :email ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -369,7 +389,7 @@ void Delete4() {
 	switch(item) {
 		case 1: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read( software_name);
 			    
 			EXEC SQL DELETE FROM depend WHERE software_name = :software_name ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -380,7 +400,7 @@ void Delete4() {
 		}
 		case 2: {
 			printf("\nselect the deleted 'pkg_name', please => ");
-			scanf("%s", pkg_name);
+			Read( pkg_name);
 			    
 			EXEC SQL DELETE FROM depend WHERE pkg_name = :pkg_name ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -391,9 +411,9 @@ void Delete4() {
 		}
 		case 3: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read( software_name);
 			printf("\nselect the deleted 'pkg_name', please => ");
-			scanf("%s", pkg_name);
+			Read( pkg_name);
 			    
 			EXEC SQL DELETE FROM depend WHERE pkg_name = :pkg_name AND software_name = :software_name;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -423,7 +443,7 @@ void Delete5() {
 	switch(item) {
 		case 1: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read( software_name);
 			    
 			EXEC SQL DELETE FROM order_pkg WHERE software_name = :software_name ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -434,7 +454,7 @@ void Delete5() {
 		}
 		case 2: {
 			printf("\nselect the deleted 'pkg_location', please => ");
-			scanf("%s", pkg_location);
+			Read( pkg_location);
 			    
 			EXEC SQL DELETE FROM order_pkg WHERE pkg_location = :pkg_location ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -445,9 +465,9 @@ void Delete5() {
 		}
 		case 3: {
 			printf("\nselect the deleted 'software_name', please => ");
-			scanf("%s", software_name);
+			Read( software_name);
 			printf("\nselect the deleted 'pkg_location', please => ");
-			scanf("%s", pkg_location);
+			Read( pkg_location);
 			    
 			EXEC SQL DELETE FROM order_pkg WHERE pkg_location = :pkg_location AND software_name = :software_name;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -477,7 +497,7 @@ void Delete6() {
 	switch(item) {
 		case 1: {
 			printf("\nselect the deleted 'type_location', please => ");
-			scanf("%s", type_location);
+			Read( type_location);
 			    
 			EXEC SQL DELETE FROM methods WHERE type_location = :type_location ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -488,7 +508,7 @@ void Delete6() {
 		}
 		case 2: {
 			printf("\nselect the deleted 'pkg_location', please => ");
-			scanf("%s", pkg_location);
+			Read( pkg_location);
 			    
 			EXEC SQL DELETE FROM methods WHERE pkg_location = :pkg_location ;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -499,9 +519,9 @@ void Delete6() {
 		}
 		case 3: {
 			printf("\nselect the deleted 'pkg_location', please => ");
-			scanf("%s", pkg_location);
+			Read( pkg_location);
 			printf("\nselect the deleted 'type_location', please => ");
-			scanf("%s", type_location);
+			Read( type_location);
 			    
 			EXEC SQL DELETE FROM methods WHERE pkg_location = :pkg_location AND type_location = :type_location;
 			if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -561,18 +581,18 @@ void Update1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[50];
-		char description[50];
+		char description[255];
 		long size;
 		char category[50];
 	EXEC SQL END DECLARE SECTION;    
 	printf("\nselect updatable 'software_name', please => ");
-	scanf("%s", software_name);
+	Read( software_name);
 	printf("\nenter new 'description', please => ");
-	scanf("%s", description);
+	Read( description);
 	printf("\nenter new 'size', please => ");
 	scanf("%ld", &size);
 	printf("\nenter new 'category', please => ");
-	scanf("%s", category);
+	Read( category);
 	    
 	EXEC SQL UPDATE software_info SET (description,size,category) = ( :description, :size, :category) WHERE software_name = :software_name ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -596,9 +616,9 @@ void Update2() {
 	scanf("%d", &item);
 	if(item == 1) {
 		printf("\nselect updatable 'email', please => ");
-		scanf("%s", email);
+		Read( email);
 		printf("\nenter new 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 		    
 		EXEC SQL UPDATE software_and_developers SET (software_name ) = ( :software_name) WHERE email = :email;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -607,9 +627,9 @@ void Update2() {
 		}
 	} else if (item == 2) {
 		printf("\nselect updatable 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 		printf("\nenter new 'email', please => ");
-		scanf("%s", email);
+		Read( email);
 			    
 		EXEC SQL UPDATE software_and_developers SET (email ) = ( :email) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -630,11 +650,11 @@ void Update3() {
 		char organization[150];
 	EXEC SQL END DECLARE SECTION;    
 	printf("\nselect updatable 'email', please => ");
-	scanf("%s", email);
+	Read( email);
 	printf("\nenter new 'fio', please => ");
-	scanf("%s", fio);
+	Read( fio);
 	printf("\nenter new 'organization', please => ");
-	scanf("%s", organization);
+	Read( organization);
 	    
 	EXEC SQL UPDATE developers SET (fio,organization) = (  :fio, :organization) WHERE email = :email ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -658,9 +678,9 @@ void Update4() {
 	scanf("%d", &item);
 	if(item == 1) {
 		printf("\nselect updatable 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 		printf("\nenter new 'pkg_name', please => ");
-		scanf("%s", pkg_name);
+		Read( pkg_name);
 		    
 		EXEC SQL UPDATE depend SET (pkg_name ) = ( :pkg_name) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -669,9 +689,9 @@ void Update4() {
 		}
 	} else if (item == 2) {
 		printf("\nselect updatable 'pkg_name', please => ");
-		scanf("%s", pkg_name);
+		Read( pkg_name);
 		printf("\nenter new 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 			    
 		EXEC SQL UPDATE depend SET software_name = :software_name WHERE pkg_name = :pkg_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -697,9 +717,9 @@ void Update5() {
 	scanf("%d", &item);
 	if(item == 1) {
 		printf("\nselect updatable 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 		printf("\nenter new 'pkg_location', please => ");
-		scanf("%s", pkg_location);
+		Read( pkg_location);
 		    
 		EXEC SQL UPDATE order_pkg SET (pkg_location ) = ( :pkg_location) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -708,9 +728,9 @@ void Update5() {
 		}
 	} else if (item == 2) {
 		printf("\nselect updatable 'pkg_location', please => ");
-		scanf("%s", pkg_location);
+		Read( pkg_location);
 		printf("\nenter new 'software_name', please => ");
-		scanf("%s", software_name);
+		Read( software_name);
 			    
 		EXEC SQL UPDATE order_pkg SET software_name = :software_name WHERE pkg_location = :pkg_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -736,9 +756,9 @@ void Update6() {
 	scanf("%d", &item);
 	if(item == 1) {
 		printf("\nselect updatable 'type_location', please => ");
-		scanf("%s", type_location);
+		Read( type_location);
 		printf("\nenter new 'pkg_location', please => ");
-		scanf("%s", pkg_location);
+		Read( pkg_location);
 		    
 		EXEC SQL UPDATE methods SET (pkg_location ) = ( :pkg_location) WHERE type_location = :type_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -747,9 +767,9 @@ void Update6() {
 		}
 	} else if (item == 2) {
 		printf("\nselect updatable 'pkg_location', please => ");
-		scanf("%s", pkg_location);
+		Read( pkg_location);
 		printf("\nenter new 'type_location', please => ");
-		scanf("%s", type_location);
+		Read( type_location);
 			    
 		EXEC SQL UPDATE methods SET type_location = :type_location WHERE pkg_location = :pkg_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -808,19 +828,22 @@ void Insert1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[50];
-		char description[50];
+		char description[255];
 		long size;
 		char category[50];
 	EXEC SQL END DECLARE SECTION;    
 	printf("\nenter 'software_name', please => ");
-	scanf("%s", software_name);
+	//scanf("%s", software_name);
+	Read(software_name);
 	printf("\nenter 'description', please => ");
-	scanf("%s", description);
+	//scanf("%s", description);
+	Read(description);
 	printf("\nenter 'size', please => ");
 	scanf("%ld", &size);
 	printf("\nenter 'category', please => ");
-	scanf("%s", category);
-	    
+	//scanf("%s", category);
+	Read(category);
+	
 	EXEC SQL INSERT INTO software_info VALUES(:software_name, :description, :size, :category);
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
@@ -838,9 +861,9 @@ void Insert2() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'software_name', please => ");
-	scanf("%s", software_name);
+	Read( software_name);
 	printf("\nenter 'email', please => ");
-	scanf("%s", email);
+	Read( email);
     
 	EXEC SQL INSERT INTO software_and_developers VALUES(:email, :software_name);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -860,11 +883,11 @@ void Insert3() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'email', please => ");
-	scanf("%s", email);
+	Read( email);
 	printf("\nenter 'fio', please => ");
-	scanf("%s", fio);
+	Read( fio);
 	printf("\nenter 'organization', please => ");
-	scanf("%s", organization);
+	Read( organization);
     
 	EXEC SQL INSERT INTO developers VALUES(:email, :fio, :organization);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -883,9 +906,9 @@ void Insert4() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'software_name', please => ");
-	scanf("%s", software_name);
+	Read( software_name);
 	printf("\nenter 'pkg_name', please => ");
-	scanf("%s", pkg_name);
+	Read( pkg_name);
     
 	EXEC SQL INSERT INTO depend VALUES(:software_name, :pkg_name);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -904,9 +927,9 @@ void Insert5() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'software_name', please => ");
-	scanf("%s", software_name);
+	Read( software_name);
 	printf("\nenter 'pkg_location', please => ");
-	scanf("%s", pkg_location);
+	Read( pkg_location);
     
 	EXEC SQL INSERT INTO order_pkg VALUES(:software_name, :pkg_location);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
@@ -925,9 +948,9 @@ void Insert6() {
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'pkg_location', please => ");
-	scanf("%s", pkg_location);
+	Read( pkg_location);
 	printf("\nenter 'type_location', please => ");
-	scanf("%s", type_location);
+	Read( type_location);
     
 	EXEC SQL INSERT INTO methods VALUES(:pkg_location, :type_location);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
