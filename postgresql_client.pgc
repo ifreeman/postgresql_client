@@ -29,7 +29,7 @@ void Read( char* res ) {
 
 void ShowAll() {
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char description[255];
 		long size;
 		char category[50];
@@ -37,7 +37,7 @@ void ShowAll() {
 		char fio[150];
 		char organization[150];
 		char pkg_name[150];
-		char pkg_location[150];
+		char pkg_location[250];
 		char type_location[50];
 	EXEC SQL END DECLARE SECTION;
 
@@ -46,26 +46,41 @@ void ShowAll() {
 		SELECT s.software_name, s.description, s.size, s.category, dev.email, dev.fio, dev.organization, dep.pkg_name, m.pkg_location, m.type_location  FROM software_info s, software_and_developers sd, developers dev, depend dep, order_pkg o, methods m where s.software_name=sd.software_name AND sd.email=dev.email AND s.software_name=dep.software_name AND s.software_name=o.software_name AND o.pkg_location=m.pkg_location;
 	
 	EXEC SQL OPEN cursor_;
-	printf("software_name |\t description |\t size |\t category |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
+	
+	char str1[]="software_name";
+	char str2[]="description";
+	char str3[]="size";
+	char str4[]="category";
+	char str5[]="e-mail";
+	char str6[]="fio";
+	char str7[]="organization";
+	char str8[]="pkg_name";
+	char str9[]="pkg_location";
+	char str10[]="type_location";
+	//printf("software_name |\t description |\t size |\t category |\t e-mail |\t fio |\t organization |\t pkg_name |\t pkg_location |\t type_location\n");
+	printf("%-20s|%-20s|%-20s|%-20s|%-20s|%-30s|%-20s|%-20s|%-20s|%-20s\n", str1, str2, str3, str4, str5, str6, str7, str8, str9, str10 );
+	printf("-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+-----------------------------+\n");
 	while(1)
 	{
 	    
 		EXEC SQL FETCH cursor_ INTO :software_name, :description, :size, :category, :email, :fio, :organization, :pkg_name, :pkg_location, :type_location ;
 	    
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-		printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
+		printf("%-20s%-20s%-20ld%-20s%-20s%-30s%-20s%-20s%-20s%-20s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
+		//printf("%s \t %s \t %ld \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n", software_name, description, size, category, email, fio, organization, pkg_name, pkg_location, type_location );
 	}
 	
 	printf("\n\n");
 	
 	EXEC SQL CLOSE cursor_;
+	EXEC SQL DEALLOCATE cursor_;
 }
 
 
 void ShowTable1() {
    
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char description[255];
 		long size;
 		char category[50];
@@ -73,51 +88,63 @@ void ShowTable1() {
 
 	    
 	EXEC SQL DECLARE cursor_1 CURSOR FOR
-		SELECT software_name, description, size, category FROM software_info;
+		SELECT software_name, description, size, category FROM software_info order by software_name;
 	    
 	EXEC SQL OPEN cursor_1;
-	printf("software_name |\t description |\t size |\t category \n");
+	char str1[]="software_name";
+	char str2[]="description";
+	char str3[]="size";
+	char str4[]="category";
+	//printf("software_name\t\t|description\t\t|size \t\t|category\t\t\n");
+	printf("%-30s|%-30s|%-30s|%-30s\n", str1, str2, str3, str4 );
+	printf("-----------------------------+-----------------------------+-----------------------------+------------------------------\n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_1 INTO :software_name, :description, :size, :category;
 		
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-		printf("%s \t %s \t %ld \t %s \n", software_name, description, size, category );
+		printf("%-30s%-30s%-30ld%-30s\n", software_name, description, size, category );
 	}
 	    
 	printf("\n\n");
 	    
 	EXEC SQL CLOSE cursor_1;
 	
-	
+	EXEC SQL DEALLOCATE cursor_1;
 	//EXEC SQL DEALLOCATE PREPARE name;
 }
 
 
 void ShowTable2() {
-    EXEC SQL BEGIN DECLARE SECTION;
-        char software_name[50];
-        char email[100];
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[150];
+		char email[100];
         
-    EXEC SQL END DECLARE SECTION;
+	EXEC SQL END DECLARE SECTION;
 
     
-    EXEC SQL DECLARE cursor_2 CURSOR FOR
-        SELECT software_name, email FROM software_and_developers;
+	EXEC SQL DECLARE cursor_2 CURSOR FOR
+        SELECT software_name, email FROM software_and_developers order by software_name;
     
-    EXEC SQL OPEN cursor_2;
-    printf("software_name |\t e-mail \n");
-    while(1) {
+	EXEC SQL OPEN cursor_2;
+    
+	char str1[]="software_name";
+	char str2[]="email";
+	printf("%-30s|%-30s\n", str1, str2);
+	printf("-----------------------------+-----------------------------\n");
+	while(1) {
         
-        EXEC SQL FETCH cursor_2 INTO :software_name, :email;
+		EXEC SQL FETCH cursor_2 INTO :software_name, :email;
         
-        if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-        printf("%s \t %s \n", software_name, email);
-    }
+        	if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
+        	//printf("%s \t %s \n", software_name, email);
+		printf("%-30s%-30s\n", software_name, email);
+	}
     
-    printf("\n\n");
+	printf("\n\n");
     
-    EXEC SQL CLOSE cursor_2;
+	EXEC SQL CLOSE cursor_2;
+	EXEC SQL DEALLOCATE cursor_2;
 
 }
 
@@ -132,101 +159,130 @@ void ShowTable3() {
 
 	    
 	EXEC SQL DECLARE cursor_3 CURSOR FOR
-		SELECT fio, email, organization FROM developers;
+		SELECT fio, email, organization FROM developers order by fio;
 	    
 	EXEC SQL OPEN cursor_3;
-	printf("fio |\t e-mail |\t organization \n");
+	
+	char str1[]="fio";
+	char str2[]="e-mail";
+	char str3[]="organization";
+	printf("%-70s|%-30s|%-30s\n", str1, str2, str3);
+	//printf("fio |\t e-mail |\t organization \n");
+	printf("---------------------------------------------------------------------+----------------------------+-----------------------------\n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_3 INTO :fio, :email, :organization;
 		
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;       
-		printf("%s \t %s \t %s \n", fio, email, organization);
+		printf("%-70s%-30s%-30s\n", fio, email, organization);
+		//printf("%s \t %s \t %s \n", fio, email, organization);
 	}
 	    
 	printf("\n\n");
 	    
 	EXEC SQL CLOSE cursor_3;
+	EXEC SQL DEALLOCATE cursor_3;
 }
 
 
 void ShowTable4() {
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char pkg_name[150];
 	EXEC SQL END DECLARE SECTION;
 
       
 	EXEC SQL DECLARE cursor_4 CURSOR FOR
-		SELECT software_name, pkg_name FROM depend;
+		SELECT software_name, pkg_name FROM depend order by software_name;
       
 	EXEC SQL OPEN cursor_4;
-	printf("software_name |\t pkg_name \n");
+	
+	char str1[]="software_name";
+	char str2[]="pkg_name";
+	printf("%-30s|%-30s\n", str1, str2);
+	printf("-----------------------------+-----------------------------\n");
+	//printf("software_name |\t pkg_name \n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_4 INTO :software_name, :pkg_name;
 	  
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-		printf("%s \t %s \n", software_name, pkg_name);
+		printf("%-30s%-30s\n", software_name, pkg_name);
+		//printf("%s \t %s \n", software_name, pkg_name);
 	}
       
 	printf("\n\n");
       
 	EXEC SQL CLOSE cursor_4;
+	EXEC SQL DEALLOCATE cursor_4;
 
 }
 
 
 void ShowTable5() {
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
-		char pkg_location[150];
+		char software_name[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;
 
       
 	EXEC SQL DECLARE cursor_5 CURSOR FOR
-		SELECT software_name, pkg_location FROM order_pkg;
+		SELECT software_name, pkg_location FROM order_pkg order by software_name;
       
 	EXEC SQL OPEN cursor_5;
-	printf("software_name |\t pkg_location \n");
+	
+	char str1[]="software_name";
+	char str2[]="pkg_location";
+	printf("%-30s|%-30s\n", str1, str2);
+	printf("-----------------------------+-----------------------------\n");
+	//printf("software_name |\t pkg_location \n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_5 INTO :software_name, :pkg_location;
 	  
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-		printf("%s \t %s \n", software_name, pkg_location);
+		printf("%-30s%-30s\n", software_name, pkg_location);
+		//printf("%s \t %s \n", software_name, pkg_location);
 	}
       
 	printf("\n\n");
       
 	EXEC SQL CLOSE cursor_5;
+	EXEC SQL DEALLOCATE cursor_5;
 
 }
 
 
 void ShowTable6() {
 	EXEC SQL BEGIN DECLARE SECTION;
-		char pkg_location[150];
+		char pkg_location[250];
 		char type_location[50];
 	EXEC SQL END DECLARE SECTION;
 
       
 	EXEC SQL DECLARE cursor_6 CURSOR FOR
-		SELECT pkg_location, type_location FROM methods;
+		SELECT pkg_location, type_location FROM methods order by pkg_location;
       
 	EXEC SQL OPEN cursor_6;
-	printf("pkg_location |\t type_location \n");
+	
+	char str1[]="pkg_location";
+	char str2[]="type_location";
+	printf("%-30s|%-30s\n", str1, str2);
+	printf("-----------------------------+-----------------------------\n");
+	//printf("pkg_location |\t type_location \n");
 	while(1) {
 	  
 		EXEC SQL FETCH cursor_6 INTO :pkg_location, :type_location;
 	  
 		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;        
-		printf("%s \t %s \n", pkg_location, type_location);
+		printf("%-30s%-30s\n", pkg_location, type_location);
+		//printf("%s \t %s \n", pkg_location, type_location);
 	}
       
 	printf("\n\n");
       
 	EXEC SQL CLOSE cursor_6;
+	EXEC SQL DEALLOCATE cursor_6;
 
 }
 
@@ -281,7 +337,7 @@ void Show() {
 void Delete1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char description[255];
 		long size;
 		char category[50];
@@ -302,7 +358,7 @@ void Delete1() {
 void Delete2() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char email[100];
 	EXEC SQL END DECLARE SECTION;    
 	
@@ -376,7 +432,7 @@ void Delete3() {
 void Delete4() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char pkg_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	
@@ -430,8 +486,8 @@ void Delete4() {
 void Delete5() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
-		char pkg_location[150];
+		char software_name[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	
 	int item = 0;
@@ -485,7 +541,7 @@ void Delete6() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char type_location[50];
-		char pkg_location[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	
 	int item = 0;
@@ -580,7 +636,7 @@ void Delete() {
 void Update1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char description[255];
 		long size;
 		char category[50];
@@ -607,7 +663,7 @@ void Update2() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char email[100];
-		char software_name[50];
+		char software_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -668,7 +724,7 @@ void Update3() {
 void Update4() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char pkg_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
@@ -707,8 +763,8 @@ void Update4() {
 void Update5() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
-		char pkg_location[150];
+		char software_name[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -747,7 +803,7 @@ void Update6() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char type_location[50];
-		char pkg_location[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -827,7 +883,7 @@ void Update() {
 void Insert1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char description[255];
 		long size;
 		char category[50];
@@ -856,7 +912,7 @@ void Insert1() {
 void Insert2() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char email[100];
 	EXEC SQL END DECLARE SECTION;    
 	
@@ -901,7 +957,7 @@ void Insert3() {
 void Insert4() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
+		char software_name[150];
 		char pkg_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	
@@ -922,8 +978,8 @@ void Insert4() {
 void Insert5() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char software_name[50];
-		char pkg_location[150];
+		char software_name[150];
+		char pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	
 	printf("\nenter 'software_name', please => ");
@@ -933,9 +989,9 @@ void Insert5() {
     
 	EXEC SQL INSERT INTO order_pkg VALUES(:software_name, :pkg_location);
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
-		printf( "%s", sqlca.sqlstate );
-		printf( "\n" );
-	}
+			printf( "%s", sqlca.sqlstate );
+			printf( "\n" );
+		}
 	EXEC SQL COMMIT;
 }
 
@@ -943,7 +999,7 @@ void Insert5() {
 void Insert6() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
-		char pkg_location[150];
+		char pkg_location[250];
 		char type_location[50];
 	EXEC SQL END DECLARE SECTION;    
 	

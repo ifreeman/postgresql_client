@@ -6,11 +6,69 @@ password in datebase is 'tvgu'
 database name is 'student_db'
 
 The structure of the datavase is a follows
-CREATE TABLE software_info (software_name varchar(50), description varchar(255) default 'Неизвестно', size bigint check(size > 0), category varchar(50) default 'неизвестно', price money, PRIMARY KEY (software_name));
-CREATE TABLE software_and_developers (email varchar(100)), software_name varchar(50), PRIMARY KEY (email, software_name));
-CREATE TABLE developers (email varchar(100), fio varchar(150), organization varchar(150), PRIMARY KEY (email));
-CREATE TABLE depend (software_name varchar(50), pkg_name varchar(150), PRIMARY KEY (software_name, pkg_name));
-CREATE TABLE order_pkg (software_name varchar(50), pkg_location varchar(150), PRIMARY KEY (software_name, pkg_location));
-CREATE TABLE methods (pkg_location varchar(150), type_location varchar(50), PRIMARY KEY (pkg_location));
+CREATE TABLE software_info (software_name varchar(150), description varchar(255) not null default 'Неизвестно', size bigint not null default 0 check(size > -1), category varchar(50) not null default 'неизвестно', PRIMARY KEY (software_name));
+CREATE TABLE software_and_developers (email varchar(100) check(email like '%@%.%'), software_name varchar(150), PRIMARY KEY (email, software_name));
+CREATE TABLE developers (email varchar(100) check(email like '%@%.%'), fio varchar(150) not null default 'Вася Пупкин', organization varchar(150) not null default 'Неизвестно', PRIMARY KEY (email));
+CREATE TABLE depend (software_name varchar(150) , pkg_name varchar(150), PRIMARY KEY (software_name, pkg_name));
+CREATE TABLE order_pkg (software_name varchar(150), pkg_location varchar(250), PRIMARY KEY (software_name, pkg_location));
+CREATE TABLE methods (pkg_location varchar(250), type_location varchar(150) not null default 'Неизвестно', PRIMARY KEY (pkg_location));
+ALTER TABLE software_and_developers ADD FOREIGN KEY (software_name) REFERENCES software_info(software_name) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE software_and_developers ADD FOREIGN KEY (email) REFERENCES developers(email) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE depend ADD FOREIGN KEY (software_name) REFERENCES software_info(software_name) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE order_pkg ADD FOREIGN KEY (software_name) REFERENCES software_info(software_name) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE order_pkg ADD FOREIGN KEY (pkg_location) REFERENCES methods(pkg_location) ON UPDATE CASCADE ON DELETE CASCADE;
+
+Filling:
+INSERT INTO software_info (software_name, description, size, category) VALUES ( 'Postgresql', 'DBMS', 10000000, 'Database');
+INSERT INTO software_info (software_name, description, size, category) VALUES ( 'Postgresql 9.0', 'DBMS', 170000000, 'Database');
+INSERT INTO software_info (software_name, description, size, category) VALUES ( 'Eclipse', 'Environment', 970000000, 'Development');
+INSERT INTO software_info (software_name, description, size, category) VALUES ( 'Kile', 'Tex-editor', 170000000, 'Printing');
+INSERT INTO software_info (software_name, description, size, category) VALUES ( 'Lyx', 'Tex-editor', 250000000, 'Printing');
+
+INSERT INTO software_and_developers (email, software_name) VALUES ('vasya@mail.com', 'Kile');
+INSERT INTO software_and_developers (email, software_name) VALUES ('petya@mail.com', 'Postgresql');
+INSERT INTO software_and_developers (email, software_name) VALUES ('petya@mail.com', 'Postgresql 9.0');
+INSERT INTO software_and_developers (email, software_name) VALUES ('zhora@mail.com', 'Eclipse');
+INSERT INTO software_and_developers (email, software_name) VALUES ('fedya@mail.com', 'Kile');
+INSERT INTO software_and_developers (email, software_name) VALUES ('borya@mail.com', 'Lyx');
+
+INSERT INTO developers (email, fio, organization) VALUES ('vasya@mail.com', 'Абрамов Василий Николаевич', 'Kile Inc');
+INSERT INTO developers (email, fio, organization) VALUES ('fedya@mail.com', 'Авдеев Федр Николаевич', 'Kile Inc');
+INSERT INTO developers (email, fio, organization) VALUES ('petya@mail.com', 'Баранкин Петр Михайлович', 'Postgresql Inc');
+INSERT INTO developers (email, fio, organization) VALUES ('zhora@mail.com', 'Баранов Георгий Викторович', 'Eclipse Inc');
+INSERT INTO developers (email, fio, organization) VALUES ('borya@mail.com', 'Левин Борис Аркадьевич', 'Lyx Inc');
+
+INSERT INTO depend (software_name, pkg_name) VALUES ('Kile', 'Kile.pkg1');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Kile', 'Kile.pkg2');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Kile', 'tetex');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Kile', 'latex');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Lyx', 'latex');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Postgresql 9.0', 'postgresql-server-9.0');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Postgresql 9.0', 'postgresql-client-9.0');
+INSERT INTO depend (software_name, pkg_name) VALUES ('Postgresql', 'Postgresql 9.0');
+
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Postgresql', 'http://www.postgresql.org/');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Postgresql', '/usr/local/postgresql');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Eclipse', 'http://www.eclipse.org/');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Eclipse', '/usr/local/eclipse/');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Kile', 'http://www.kile.org/');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Kile', '/usr/local/kile/');
+INSERT INTO order_pkg (software_name, pkg_location) VALUES ('Lyx', 'http://www.lyx.org/');
+
+INSERT INTO methods (pkg_location, type_location) VALUES ('http://www.postgresql.org/', 'link');
+INSERT INTO methods (pkg_location, type_location) VALUES ('/usr/local/postgresql', 'local');
+INSERT INTO methods (pkg_location, type_location) VALUES ('http://www.eclipse.org/', 'link');
+INSERT INTO methods (pkg_location, type_location) VALUES ('/usr/local/eclipse/', 'local');
+INSERT INTO methods (pkg_location, type_location) VALUES ('http://www.kile.org/', 'link');
+INSERT INTO methods (pkg_location, type_location) VALUES ('/usr/local/kile/', 'local');
+INSERT INTO methods (pkg_location, type_location) VALUES ('http://www.lyx.org/', 'link');
+
+
+
+
+//добавить order by
+//проверить на зацикливание
+
+
 
 
