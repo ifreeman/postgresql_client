@@ -637,12 +637,15 @@ void Update1() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[150];
+		char new_software_name[150];
 		char description[255];
 		long size;
 		char category[50];
 	EXEC SQL END DECLARE SECTION;    
 	printf("\nselect updatable 'software_name', please => ");
 	Read( software_name);
+	printf("\nenter new 'software_name', please => ");
+	Read( new_software_name);
 	printf("\nenter new 'description', please => ");
 	Read( description);
 	printf("\nenter new 'size', please => ");
@@ -650,7 +653,7 @@ void Update1() {
 	printf("\nenter new 'category', please => ");
 	Read( category);
 	    
-	EXEC SQL UPDATE software_info SET (description,size,category) = ( :description, :size, :category) WHERE software_name = :software_name ;
+	EXEC SQL UPDATE software_info SET (software_name,description,size,category) = ( :new_software_name, :description, :size, :category) WHERE software_name = :software_name ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
 		printf( "\n" );
@@ -663,7 +666,9 @@ void Update2() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char email[100];
+		char new_email[100];
 		char software_name[150];
+		char new_software_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -673,10 +678,12 @@ void Update2() {
 	if(item == 1) {
 		printf("\nselect updatable 'email', please => ");
 		Read( email);
+		printf("\nenter new 'email', please => ");
+		Read( new_email);
 		printf("\nenter new 'software_name', please => ");
 		Read( software_name);
 		    
-		EXEC SQL UPDATE software_and_developers SET (software_name ) = ( :software_name) WHERE email = :email;
+		EXEC SQL UPDATE software_and_developers SET (email,software_name ) = ( :new_email, :software_name) WHERE email = :email;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -684,10 +691,12 @@ void Update2() {
 	} else if (item == 2) {
 		printf("\nselect updatable 'software_name', please => ");
 		Read( software_name);
+		printf("\nenter new 'software_name', please => ");
+		Read( new_software_name);
 		printf("\nenter new 'email', please => ");
 		Read( email);
 			    
-		EXEC SQL UPDATE software_and_developers SET (email ) = ( :email) WHERE software_name = :software_name;
+		EXEC SQL UPDATE software_and_developers SET (email,software_name ) = ( :email, :new_software_name) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -702,17 +711,20 @@ void Update3() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char email[100];
+		char new_email[100];
 		char fio[150];
 		char organization[150];
 	EXEC SQL END DECLARE SECTION;    
 	printf("\nselect updatable 'email', please => ");
 	Read( email);
+	printf("\nenter new 'email', please => ");
+	Read( new_email);
 	printf("\nenter new 'fio', please => ");
 	Read( fio);
 	printf("\nenter new 'organization', please => ");
 	Read( organization);
 	    
-	EXEC SQL UPDATE developers SET (fio,organization) = (  :fio, :organization) WHERE email = :email ;
+	EXEC SQL UPDATE developers SET (email,fio,organization) = (  :new_email, :fio, :organization) WHERE email = :email ;
 	if( strncmp(sqlca.sqlstate, "00000", 5)) {
 		printf( "%s", sqlca.sqlstate );
 		printf( "\n" );
@@ -725,7 +737,9 @@ void Update4() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[150];
+		char new_software_name[150];
 		char pkg_name[150];
+		char new_pkg_name[150];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -735,10 +749,12 @@ void Update4() {
 	if(item == 1) {
 		printf("\nselect updatable 'software_name', please => ");
 		Read( software_name);
+		printf("\nenter new 'software_name', please => ");
+		Read( new_software_name);
 		printf("\nenter new 'pkg_name', please => ");
 		Read( pkg_name);
 		    
-		EXEC SQL UPDATE depend SET (pkg_name ) = ( :pkg_name) WHERE software_name = :software_name;
+		EXEC SQL UPDATE depend SET (software_name,pkg_name ) = ( :new_software_name, :pkg_name) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -748,8 +764,10 @@ void Update4() {
 		Read( pkg_name);
 		printf("\nenter new 'software_name', please => ");
 		Read( software_name);
+		printf("\nenter new 'pkg_name', please => ");
+		Read( new_pkg_name);
 			    
-		EXEC SQL UPDATE depend SET software_name = :software_name WHERE pkg_name = :pkg_name;
+		EXEC SQL UPDATE depend SET (software_name, pkg_name) = (:new_pkg_name, :software_name) WHERE pkg_name = :pkg_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -764,7 +782,9 @@ void Update5() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char software_name[150];
+		char new_software_name[150];
 		char pkg_location[250];
+		char new_pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -774,10 +794,12 @@ void Update5() {
 	if(item == 1) {
 		printf("\nselect updatable 'software_name', please => ");
 		Read( software_name);
+		printf("\nenter new 'software_name', please => ");
+		Read( new_software_name);
 		printf("\nenter new 'pkg_location', please => ");
 		Read( pkg_location);
 		    
-		EXEC SQL UPDATE order_pkg SET (pkg_location ) = ( :pkg_location) WHERE software_name = :software_name;
+		EXEC SQL UPDATE order_pkg SET (software_name, pkg_location ) = ( :new_software_name, :pkg_location) WHERE software_name = :software_name;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -785,10 +807,12 @@ void Update5() {
 	} else if (item == 2) {
 		printf("\nselect updatable 'pkg_location', please => ");
 		Read( pkg_location);
+		printf("\nenter new 'pkg_location', please => ");
+		Read( new_pkg_location);
 		printf("\nenter new 'software_name', please => ");
 		Read( software_name);
 			    
-		EXEC SQL UPDATE order_pkg SET software_name = :software_name WHERE pkg_location = :pkg_location;
+		EXEC SQL UPDATE order_pkg SET (software_name, pkg_location) = (:software_name, :new_pkg_location) WHERE pkg_location = :pkg_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -803,7 +827,9 @@ void Update6() {
 
 	EXEC SQL BEGIN DECLARE SECTION;
 		char type_location[50];
+		char new_type_location[50];
 		char pkg_location[250];
+		char new_pkg_location[250];
 	EXEC SQL END DECLARE SECTION;    
 	int item = 0;
 	printf("choose table field for search, please =>\n");
@@ -813,10 +839,12 @@ void Update6() {
 	if(item == 1) {
 		printf("\nselect updatable 'type_location', please => ");
 		Read( type_location);
+		printf("\nenter new 'type_location', please => ");
+		Read( new_type_location);
 		printf("\nenter new 'pkg_location', please => ");
 		Read( pkg_location);
 		    
-		EXEC SQL UPDATE methods SET (pkg_location ) = ( :pkg_location) WHERE type_location = :type_location;
+		EXEC SQL UPDATE methods SET (pkg_location, type_location ) = ( :pkg_location, :new_type_location) WHERE type_location = :type_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
@@ -824,10 +852,12 @@ void Update6() {
 	} else if (item == 2) {
 		printf("\nselect updatable 'pkg_location', please => ");
 		Read( pkg_location);
+		printf("\nenter new 'pkg_location', please => ");
+		Read( new_pkg_location);
 		printf("\nenter new 'type_location', please => ");
 		Read( type_location);
 			    
-		EXEC SQL UPDATE methods SET type_location = :type_location WHERE pkg_location = :pkg_location;
+		EXEC SQL UPDATE methods SET (type_location, pkg_location) = (:type_location, :new_pkg_location) WHERE pkg_location = :pkg_location;
 		if( strncmp(sqlca.sqlstate, "00000", 5)) {
 			printf( "%s", sqlca.sqlstate );
 			printf( "\n" );
