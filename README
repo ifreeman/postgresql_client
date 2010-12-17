@@ -66,9 +66,4 @@ INSERT INTO methods (pkg_location, type_location) VALUES ('http://www.lyx.org/',
 
 
 
-//добавить order by
-//проверить на зацикливание
-
-
-
 

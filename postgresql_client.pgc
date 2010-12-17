@@ -1059,6 +1059,138 @@ void Insert() {
 }
 
 
+void Select1() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char fio[150];
+		char organization[150];
+	EXEC SQL END DECLARE SECTION;
+	
+	printf("\nenter 'organization', please => ");
+	Read( organization);
+
+	EXEC SQL DECLARE cursor_7 CURSOR FOR
+		SELECT organization, fio FROM developers WHERE organization = :organization ORDER BY fio;
+		
+	EXEC SQL OPEN cursor_7;
+	char str1[]="organization";
+	char str2[]="fio";
+	printf("%-30s|%-70s\n", str1, str2);
+	printf("----------------------------+---------------------------------------------------------------------+\n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_7 INTO :organization, :fio;
+		
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;       
+		printf("%-30s%-70s\n", organization, fio);
+		//printf("%s \t %s \t %s \n", fio, email, organization);
+	}
+	EXEC SQL CLOSE cursor_7;
+	EXEC SQL DEALLOCATE cursor_7;
+}
+
+
+void Select2() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char fio[150];
+		char software_name[150];
+	EXEC SQL END DECLARE SECTION;
+	
+	printf("\nenter 'fio', please => ");
+	Read( fio);
+
+	EXEC SQL DECLARE cursor_8 CURSOR FOR
+		SELECT fio, software_name FROM (developers dev inner join software_and_developers s on s.email = dev.email) WHERE fio = :fio ORDER BY software_name;
+		
+	EXEC SQL OPEN cursor_8;
+	char str1[]="fio";
+	char str2[]="software_name";
+	printf("%-70s|%-30s\n", str1, str2);
+	printf("---------------------------------------------------------------------+-----------------------------\n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_8 INTO :fio, :software_name;
+		
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;       
+		printf("%-70s%-30s\n", fio, software_name);
+	}
+	EXEC SQL CLOSE cursor_8;
+	EXEC SQL DEALLOCATE cursor_8;
+}
+
+
+void Select3() {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char software_name[150];
+		char pkg_name[150];
+	EXEC SQL END DECLARE SECTION;
+	
+	printf("\nenter 'software_name', please => ");
+	Read( software_name);
+
+	EXEC SQL DECLARE cursor_9 CURSOR FOR
+		SELECT software_name, pkg_name FROM depend WHERE software_name = :software_name ORDER BY pkg_name;
+		
+	EXEC SQL OPEN cursor_9;
+	char str1[]="software_name";
+	char str2[]="pkg_name";
+	printf("%-30s|%-30s\n", str1, str2);
+	printf("----------------------------+-----------------------------\n");
+	while(1) {
+	  
+		EXEC SQL FETCH cursor_9 INTO :software_name, :pkg_name;
+		
+		if( !strncmp(sqlca.sqlstate, "02000", 5)) break;       
+		printf("%-30s%-30s\n", software_name, pkg_name);
+	}
+	EXEC SQL CLOSE cursor_9;
+	EXEC SQL DEALLOCATE cursor_9;
+}
+
+
+void Select() {
+
+	printf("\nChoose one request:\n");
+	printf("1. Input 'organization', output 'fio'.\n");
+	printf("2. Input 'fio', output 'software_name'.\n");
+	printf("3. Input 'software_name', output depend_pkg.\n");
+	printf("0. For cancel mod \n");
+	int choose = 0;
+	scanf("%d", &choose);
+	switch(choose) {
+		case 1: { 
+		Select1();
+		break;
+	    } 
+	    case 2: { 
+		Select2();
+		break;
+	    } 
+	    case 3: { 
+		Select3();
+		break;
+	    }
+	    case 4: { 
+		//Insert4();
+		break;
+	    }
+	    case 5: { 
+		//Insert5();
+		break;
+	    }
+	    case 6: { 
+		//Insert6();
+		break;
+	    }
+	    case 0: { 
+		break;
+	    }
+	    default: {
+		printf("Sorry, guy, table with this number does not exist!");
+	    }
+	}
+}
+
+
 void ShowTableList( ) {
 	printf("\n1. software_info\n");
 	printf("2. software_and_developers\n");
@@ -1078,7 +1210,8 @@ void Menu( ) {
 	    printf("2. Insert.\n");
 	    printf("3. Update.\n");
 	    printf("4. Delete.\n");
-	    printf("5. Show table list.\n\n");
+	    printf("5. my requests.\n");
+	    printf("6. Show table list.\n\n");
 	    scanf("%d", &item);
 	    switch(item) {
 		case 0: {
@@ -1102,6 +1235,10 @@ void Menu( ) {
 		    break;
 		}
 		case 5: {
+		    Select();
+		    break;
+		}
+		case 6: {
 		    ShowTableList();
 		    break;
 		}
