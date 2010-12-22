@@ -15,24 +15,31 @@ ECPGLIB_INCLUDE:=$(shell find /usr/include/ -name 'ecpglib.h')
 ECPGLIB_INC_DIR:=$(dir $(ECPGLIB_INCLUDE))
 
 SRCDIR := $(shell pwd)
+INSTDIR := $(dir $(SRCDIR))
 
-BUILDDIR  ?= $(SRCDIR)/build
-BININST   ?= $(SRCDIR)/$(NAME)/bin/
-DOCINST   ?= $(SRCDIR)/$(NAME)/doc/
+BUILDDIR  ?= $(INSTDIR)$(NAME)-$(VERSION)/build/
+BININST   ?= $(INSTDIR)$(NAME)-$(VERSION)/bin/
+DOCINST   ?= $(INSTDIR)$(NAME)-$(VERSION)/doc/
+
 .PHONY: all
-
+#all:
+#	@echo $(INSTDIR)$(NAME)-$(VERSION)/
+#	@echo $(BUILDDIR)
+#	@echo $(INSTDIR)
+#	@echo $(BININST)
+#	@echo $(DOCINST)
 all: postgresql_client
 
 
 
-postgresql_client: postgresql_client.c
-	gcc $^ -I $(ECPGLIB_INC_DIR) -lecpg -o $@ -Wextra -g
-	mv $@ $(BUILDDIR)
+postgresql_client: $(BUILDDIR)postgresql_client.c
+	gcc $^ -I $(ECPGLIB_INC_DIR) -lecpg -o $(BUILDDIR)$@ -Wextra -g
+#mv $@ $(BUILDDIR)
 
-postgresql_client.c: postgresql_client.pgc
-	mkdir $(BUILDDIR)
-	ecpg $<
-	cp $@ $(BUILDDIR)
+$(BUILDDIR)postgresql_client.c: postgresql_client.pgc
+	mkdir -p $(BUILDDIR)
+	ecpg -o $@ $<
+#mv postgresql_client.c $(BUILDDIR)
 
 .PHONY: install
 
@@ -60,5 +67,9 @@ dist: tar
 
 clean:
 	rm -fr $(BUILDDIR)
-	rm -f $(NAME).c
+
+.PHONY: uninstall
+
+uninstall:
+	rm -fr $(INSTDIR)$(NAME)-$(VERSION)/
 	
