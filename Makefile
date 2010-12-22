@@ -20,9 +20,12 @@ INSTDIR := $(dir $(SRCDIR))
 BUILDDIR  ?= $(INSTDIR)$(NAME)-$(VERSION)/build/
 BININST   ?= $(INSTDIR)$(NAME)-$(VERSION)/bin/
 DOCINST   ?= $(INSTDIR)$(NAME)-$(VERSION)/doc/
+LOGINST   ?= $(INSTDIR)$(NAME)-$(VERSION)/log/
 
 .PHONY: all
 #all:
+#	@echo $(BININST)postgresql_client
+#	@echo $(BININST)$(NAME)
 #	@echo $(INSTDIR)$(NAME)-$(VERSION)/
 #	@echo $(BUILDDIR)
 #	@echo $(INSTDIR)
@@ -33,23 +36,30 @@ all: postgresql_client
 
 
 postgresql_client: $(BUILDDIR)postgresql_client.c
-	gcc $^ -I $(ECPGLIB_INC_DIR) -lecpg -o $(BUILDDIR)$@ -Wextra -g
-#mv $@ $(BUILDDIR)
+	gcc $^ -I $(ECPGLIB_INC_DIR) -lecpg -o $(BUILDDIR)postgresql_client -Wextra -g
 
 $(BUILDDIR)postgresql_client.c: postgresql_client.pgc
 	mkdir -p $(BUILDDIR)
 	ecpg -o $@ $<
-#mv postgresql_client.c $(BUILDDIR)
+
+.PHONY: test
+test: all $(VALGRIND_TEST)
+
+$(VALGRIND_TEST): $(BININST)$(NAME)
+	valgrind --log-file=$(LOGINST)valgrind.log --leak-check=full $(BININST)postgresql_client
 
 .PHONY: install
 
 install: all
 	mkdir -p $(BININST)
 	mkdir -p $(DOCINST)
+	mkdir -p $(LOGINST)
+	touch $(LOGINST)valgrind.log
 	$(INSTALL) -m 755 $(BUILDDIR)/$(NAME) $(BININST)
 	$(INSTALL) -m 644 $(SRCDIR)/$(DOCS) $(DOCINST)
 
 .PHONY: check
+check: all test
 
 .PHONY: tar
 tar:
